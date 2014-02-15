@@ -26,24 +26,7 @@ block content
                         textarea(cols="40", rows="25", class="arena-textarea", id="textarea").
                             alert('Hello #{name}!');
                     button(class="btn btn-warning", onclick="submitActions()") Submit
-    script.
-        var cm = 'hello';
-        var hello = 'hello';
-        $(function() { 
-            ta = document.getElementById('textarea');
-            cm = CodeMirror.fromTextArea(ta, {
-                lineNumbers: true,
-                matchBrackets: true, 
-                mode: 'javascript',
-                theme: 'twilight',
-                lineWrapping: true
-            });
 
-            cm.setSize(null, 400);
-        });
+    script(type="text/javascript", src="/javascripts/repl.js")
+    
 
-        function submitActions() {
-            cm.save();
-            console.log(ta.value);
-            eval(ta.value);
-        }

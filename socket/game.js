@@ -53,6 +53,7 @@ module.exports = function(gameState, io) {
 
         socket.on('disconnect', function () {
           gameState.deregisterPlayer(socket.player);
+          broadcastGameState();
         });
     }
 };

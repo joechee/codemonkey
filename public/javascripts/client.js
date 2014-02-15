@@ -180,7 +180,7 @@ Game.prototype.updateWorld = function () {
 }
 
 Game.prototype.addPlayer = function (data) {
-  var newPlayer = new Player2(data);
+  var newPlayer = new Player(data);
   this.players[newPlayer.id] = newPlayer;
   this.stage.addChild(newPlayer.view);
 }
@@ -219,7 +219,7 @@ Game.prototype.removeProjectile = function (projectile) {
 // Player
 // ----------
 
-var Player2 = function(data) {
+var Player = function(data) {
   this.data = data;
   this.id = data.id;
   this.name = data.name;
@@ -239,13 +239,13 @@ var Player2 = function(data) {
   this.view.alpha = 1;
 }
 
-Player2.prototype.tick = function () {
+Player.prototype.tick = function () {
   var xy = xyToPix({x:this.x, y:this.y});
   this.view.x = xy.x;
   this.view.y = xy.y
 }
 
-Player2.prototype.die = function () {
+Player.prototype.die = function () {
   this.alpha = 0;
 }
 

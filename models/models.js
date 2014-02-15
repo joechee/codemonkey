@@ -119,7 +119,7 @@ try {
         var player = new Player(gameState, obj2[i].id);
         player.unserialize(obj2[i]);
       } else if (!obj[i] && type === "projectile") {
-        var projectile = new Projectile(gameState, obj2[i].x, obj2[i].y, obj2[i].direction, obj2[i]);
+        var projectile = new Projectile(gameState, obj2[i].x, obj2[i].y, obj2[i].direction, obj2[i], obj2[i].id);
         projectile.unserialize(obj2[i]);
       }
     } 
@@ -224,7 +224,7 @@ try {
   };
 
 
-  function Projectile(gameState, x, y, direction, owner) {
+  function Projectile(gameState, x, y, direction, owner, id) {
     if (!gameState || x==undefined || y==undefined || direction==undefined || !owner) {
 
       throw new Error("Undefined argments passed into Projectile constructor!");
@@ -234,7 +234,7 @@ try {
     this.gameState = gameState;
     this.direction = direction;
     this.owner = owner;
-    this.id = idgen.generate(); // Not too sure if this is necessary
+    this.id = id || idgen.generate(); // Not too sure if this is necessary
     gameState.registerProjectile(this);
   }
 

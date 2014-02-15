@@ -261,3 +261,12 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
     visibility: hidden;
   }
 }
+
+.CodeMirror-code > div {
+  background: #555555;
+}
+
+.CodeMirror-code > div.run {
+  background: #111111;
+}
+

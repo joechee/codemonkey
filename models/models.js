@@ -190,6 +190,13 @@ try {
           this.gameState.players[i].y === this.y)) {
         return true;
       }
+      if (this.gameState.players[i].x < 0 ||
+          this.gameState.players[i].y < 0 ||
+          this.gameState.players[i].x > MAP_SIZE[0] ||
+          this.gameState.players[i].y > MAP_SIZE[1]) {
+        // TODO: Fix bounds for player movement 
+        return "wall";
+      }
     }
     return false;
   };
@@ -202,6 +209,7 @@ try {
                                     direction,
                                     this);
   };
+
 
   function Projectile(gameState, x, y, direction, owner) {
     if (!gameState || !x || !y || !direction || !owner) {

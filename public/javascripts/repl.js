@@ -2,7 +2,9 @@
 	// LOSING BATTLE HERE YO
 
 	function safeEval(code) {
+		var error = false;
 		setRunningTimeout();
+
 		try {
 			if (code === "") {
 				return;
@@ -14,16 +16,21 @@
 						safeEval: undefined,
 						setInterval: undefined,
 						setTimeout: undefined,
-						Function: undefined
+						Function: undefined,
+						me: document.playerCommands,
+						document: undefined
 					};
 					var safeCode = "with(data){" + code + "};";
 					eval(safeCode);
-					window.data = undefined;	
 				}
 			}	
 		} catch (e) {
 			console.error(e);
+			error = true;
+		} finally {
+			window.data = undefined;
 		}
+		return !error;
 	}
 
 
@@ -110,6 +117,56 @@
 		}
 	}
 
+    var $repl = document.getElementById('textarea');
+    $(function() { 
+        cm = CodeMirror.fromTextArea($repl, {
+            lineNumbers: true,
+            matchBrackets: true, 
+            mode: 'javascript',
+            theme: 'twilight',
+            lineWrapping: true
+        });
+
+        cm.setSize(null, 400);
+    });
+
+    var $codeMirror;
+    var lastLineRun = 0;
+
+    function getValue (cm) {
+    	var result = "";
+    	for (var i = lastLineRun; i < cm.lastLine(); i++) {
+    		result += cm.getLine(i);
+    	}
+    	return result;
+    }
+    $codeMirror = document.querySelector('.textarea-container');
+    $codeMirror.addEventListener("keydown", function (e) {
+    	cm.save();
+
+    	var code = getValue(cm);
+    	var ENTER = 13;
+    	if (e.keyCode === ENTER) {
+    		if (!canThisCodeRun(code)) {
+    			return;
+    		} else {
+    			safeEval(code);
+    			$('.CodeMirror-code > div').addClass('run'); 
+    			// TODO: Not add the class for lines that have not been run
+    			lastLineRun = cm.lastLine();
+    		}
+    	}
+    });
+
+    function count(str, char) {
+    	var result = 0;
+    	for (var i = 0; i < str.length; i++) {
+    		if (str[i] === char) {
+    			result++;
+    		}
+    	}
+    	return result;
+    }
 
 	window.checkTimeout = checkTimeout;
 	window.safeEval = safeEval;

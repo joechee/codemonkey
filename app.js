@@ -9,6 +9,8 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var socket = require('socket.io');
+var models = require('./models/models.js');
+
 
 var app = express();
 

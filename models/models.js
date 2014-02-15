@@ -1,5 +1,7 @@
 (function (window) {
-
+  
+  var MAP_SIZE = [10, 10];
+  
   var UP = 0;
   var RIGHT = 1;
   var LEFT = 2;
@@ -29,7 +31,7 @@
   }
 
   GameState.prototype.registerPlayer = function (player) {
-    this.players.add(player);
+    this.players.push(player);
     player.gameState = gameState;
   };
 
@@ -112,7 +114,7 @@
     this.y = oldY + directions[this.direction][1];
 
     var playerCollision = this.checkCollision();
-    if (playerCollision) {
+    if (playerCollision !== "wall") {
       playerCollision.HP--;
       gameState.deregisterProjectile(this);
     }
@@ -123,6 +125,10 @@
       if (this.gameState.players[i].x === x || 
           this.gameState.players[i].y === y) {
         return this.gameState.players[i];
+      }
+      if (this.gameState.players[i].x > MAP_SIZE[0] ||
+          this.gameState.players[i].y > MAP_SIZE[1]) {
+        return "wall";
       }
     }
     return false;

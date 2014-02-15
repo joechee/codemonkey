@@ -1,9 +1,19 @@
 (function (window) {
 	// LOSING BATTLE HERE YO
 
+	var data = {
+		eval: undefined,
+		safeEval: undefined,
+		setInterval: undefined,
+		setTimeout: undefined,
+		Function: undefined,
+		document: undefined
+	};
+
 	function safeEval(code) {
 		var error = false;
 		setRunningTimeout();
+		data = document.playerCommands;
 
 		try {
 			if (code === "") {
@@ -11,15 +21,7 @@
 			} else {
 				code = checkCode(code);
 				if (code) {
-					window.data = {
-						eval: undefined,
-						safeEval: undefined,
-						setInterval: undefined,
-						setTimeout: undefined,
-						Function: undefined,
-						me: document.playerCommands,
-						document: undefined
-					};
+					window.data = data;
 					var safeCode = "with(data){" + code + "};";
 					eval(safeCode);
 				}
@@ -30,7 +32,7 @@
 		} finally {
 			window.data = undefined;
 		}
-		return !error;
+		return error;
 	}
 
 
@@ -126,16 +128,15 @@
             theme: 'twilight',
             lineWrapping: true
         });
-
+    	cm.lastLineRun = 0;
         cm.setSize(null, 400);
     });
 
     var $codeMirror;
-    var lastLineRun = 0;
 
     function getValue (cm) {
     	var result = "";
-    	for (var i = lastLineRun; i < cm.lastLine(); i++) {
+    	for (var i = cm.lastLineRun; i < cm.lastLine(); i++) {
     		result += cm.getLine(i);
     	}
     	return result;
@@ -150,10 +151,30 @@
     		if (!canThisCodeRun(code)) {
     			return;
     		} else {
-    			safeEval(code);
-    			$('.CodeMirror-code > div').addClass('run'); 
+    			var err = safeEval(code);
+    			var replLines = $('.CodeMirror-code > div');
+    			if (!err) {
+	    			replLines.each(function (index) {
+	    				if (index === replLines.length) {
+	    					return;
+	    				} else if (!$(this).hasClass('run')) {
+	    					$(this).addClass('run');
+	    				}
+	    			});	
+    			} else {
+					replLines.each(function (index) {
+	    				if (index === replLines.length + 1) {
+	    					return;
+	    				} else if (!$(this).hasClass('run')) {
+	    					$(this).addClass('run err');
+	    				}
+	    			});
+    			}
+    			
+    			replLines.addClass('run');
+    			$(replLines[replLines.length]).removeClass('run');
     			// TODO: Not add the class for lines that have not been run
-    			lastLineRun = cm.lastLine();
+    			cm.lastLineRun = cm.lastLine();
     		}
     	}
     });

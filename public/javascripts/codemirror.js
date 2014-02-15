@@ -3584,7 +3584,13 @@ window.CodeMirror = (function() {
     goGroupRight: function(cm) {cm.moveH(1, "group");},
     goGroupLeft: function(cm) {cm.moveH(-1, "group");},
     goWordRight: function(cm) {cm.moveH(1, "word");},
-    delCharBefore: function(cm) {cm.deleteH(-1, "char");},
+    delCharBefore: function(cm) {
+      var afterDelete = cm.findPosH(cm.doc.sel.from, -1, "char").line;
+      if (afterDelete < cm.lastLineRun) {
+        return false;
+      }
+      cm.deleteH(-1, "char");
+    },
     delCharAfter: function(cm) {cm.deleteH(1, "char");},
     delWordBefore: function(cm) {cm.deleteH(-1, "word");},
     delWordAfter: function(cm) {cm.deleteH(1, "word");},
@@ -4923,7 +4929,6 @@ window.CodeMirror = (function() {
     remove: function(at, n) { this.removeInner(at - this.first, n); },
 
     getValue: function(lineSep) {
-      console.log(this.first);
       var lines = getLines(this, this.first, this.first + this.size);
       if (lineSep === false) return lines;
       return lines.join(lineSep || "\n");

@@ -1,4 +1,5 @@
 (function (window) {
+	// LOSING BATTLE HERE YO
 
 	function safeEval(code) {
 		setRunningTimeout();
@@ -15,7 +16,8 @@
 						setTimeout: undefined,
 						Function: undefined
 					};
-					eval("with(data){" + code + ";");
+					var safeCode = "with(data){" + code + "};";
+					eval(safeCode);
 					window.data = undefined;	
 				}
 			}	
@@ -24,20 +26,61 @@
 		}
 	}
 
+
+	function canThisCodeRun(code) {
+		var braceStack = [];
+		var parenStack = [];
+		var bracketStack = [];
+		var quotes = false;
+		var singleQuotes = false;
+
+		for (var i = 0; i < code.length; i++) {
+			if (code[i] === "\"" && code[i - 1] === "\\" && !singleQuotes) {
+				quotes = !quotes;
+			} else if (code[i] === "\"" && code[i - 1] === "\\" && !quotes) {
+				singleQuotes = !singleQuotes;
+			} else if (code[i] === "{" && code[i - 1] !== "\\{"
+				&& !quotes && !singleQuotes) {
+				braceStack.push("{");
+			} else if (code[i] === "(" && code[i - 1] !== "\\("
+				&& !quotes && !singleQuotes) {
+				parenStack.push("(");
+			} else if (code[i] === "[" && code[i - 1] !== "\\["
+				&& !quotes && !singleQuotes) {
+				bracketStack.push("[");
+			} else if (code[i] === "}" && !quotes && !singleQuotes && braceStack.pop() === undefined) {
+				return true; // Errors out
+			} else if (code[i] === "]" && !quotes && !singleQuotes && bracketStack.pop() === undefined) {
+				return true; // Errors out
+			} else if (code[i] === ")" && !quotes && !singleQuotes && parenStack.pop() === undefined) {
+				return true; // Errors out
+			}
+		}
+
+		if (braceStack.length > 0 || parenStack.length > 0 || bracketStack > 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+
 	// Checks if there is a } bracket that closes the with 
 	function checkCode(code) {
 		var stack = [];
 		var quotes = false;
+		var singleQuotes = false;
 		for (var i = 0; i < code.length; i++) {
-			if (code[i] === "\"") {
+			if (code[i] === "\"" && code[i - 1] === "\\" && !singleQuotes) {
 				quotes = !quotes;
-			} else if (code[i] === "{") {
-				stack.push("{");
-				if (!quotes) {
-					// TODO: Fix obvious flaw
+			} else if (code[i] === "\"" && code[i - 1] === "\\" && !quotes) {
+				singleQuotes = !singleQuotes;
+			} else if (code[i] === "{" && code[i - 1] !== "\\{") {
+				if (!quotes && !singleQuotes) {
+					stack.push("{");
 					code = code.slice(0, i + 1) + ";checkTimeout();" + code.slice(i + 1, code.length);
 				}
-			} else if (code[i] === "{" && stack.pop() === undefined) {
+			} else if (code[i] === "}" && !quotes && !singleQuotes && stack.pop() === undefined) {
 				return false;
 			}
 		}
@@ -70,6 +113,7 @@
 
 	window.checkTimeout = checkTimeout;
 	window.safeEval = safeEval;
+	window.canThisCodeRun = canThisCodeRun;
 
 	// TODO: Prevent __defineSetter__ and __defineGetter__ from messing around with code
 

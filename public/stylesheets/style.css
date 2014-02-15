@@ -7,6 +7,7 @@ html, body {
 
 * {
 	font-family: 'peachy-keen', verdana, sans-serif;
+	color: #ffcb2d;
 }
 
 .full {
@@ -124,12 +125,20 @@ html, body {
 	text-shadow: 0px 0px 20px #000;
 }
 
+.play-container {
+	position: relative;
+	padding-top: 50px;
+}
+
 .play {
 	background-image: url('../images/background-play.jpg');
 }
 
-a {
-  color: #00b7ff;
+.logo-small {
+	position: absolute;
+	top: 10px;
+	left: -20px;
+	z-index: 100;
 }
 
 .arena-container {
@@ -138,7 +147,7 @@ a {
 
 .arena-canvas {
 	background-color: black;
-	border: 5px solid yellow;
+	border: 5px solid #ffcb2d;
 }
 
 .arena-textarea {

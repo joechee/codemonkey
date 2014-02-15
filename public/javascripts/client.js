@@ -28,7 +28,7 @@ GameConfig = {
   tileSize: 20,
   padding: 2,
   playerSize: 18,
-  doChaseCam: false
+  doChaseCam: true
 };
 
 var xyToPix = function(pt) {
@@ -121,20 +121,19 @@ Game.prototype.handleTick = function(ticker_data) {
   
   // Chase Cam - Currently hardcoded to chase Player id:1234
   if (GameConfig.doChaseCam) {
-    this.stage.scaleX = 1.0;
-    this.stage.scaleY = 1.0;
-
     var chased = this.players[this.pid];
     xy = xyToPix({x:chased.x, y:chased.y});
-    var leftOffset = this.stage.canvas.width / 2;
-    var topOffset = this.stage.canvas.height / 2;
+    var scaleX = 2.0;
+    var scaleY = 2.0;
+    var leftOffset = this.stage.canvas.width / 2 / scaleX;
+    var topOffset = this.stage.canvas.height / 2 / scaleY;
 
     createjs.Tween.removeTweens(this.stage);
     createjs.Tween.get(this.stage, {override:true})
     .to({ regX : xy.x - leftOffset,
           regY : xy.y - topOffset,
-          scaleX: 2.0,
-          scaleY: 2.0}, 200, createjs.Ease.linear);
+          scaleX: scaleX,
+          scaleY: scaleY}, 200, createjs.Ease.linear);
 
   } else {
 
@@ -182,7 +181,7 @@ Game.prototype.updateWorld = function () {
 }
 
 Game.prototype.addPlayer = function (data) {
-  var newPlayer = new Player2(data);
+  var newPlayer = new Player(data);
   this.players[newPlayer.id] = newPlayer;
   this.stage.addChild(newPlayer.view);
 }
@@ -221,7 +220,7 @@ Game.prototype.removeProjectile = function (projectile) {
 // Player
 // ----------
 
-var Player2 = function(data) {
+var Player = function(data) {
   this.data = data;
   this.id = data.id;
   this.name = data.name;
@@ -241,13 +240,13 @@ var Player2 = function(data) {
   this.view.alpha = 1;
 }
 
-Player2.prototype.tick = function () {
+Player.prototype.tick = function () {
   var xy = xyToPix({x:this.x, y:this.y});
   this.view.x = xy.x;
   this.view.y = xy.y
 }
 
-Player2.prototype.die = function () {
+Player.prototype.die = function () {
   this.alpha = 0;
 }
 

@@ -6,7 +6,7 @@ var Client = function () {
 
   var stage = new createjs.Stage(arenaCanvas);
 
-  var game = new Game(stage);
+  game = new Game(stage);
   console.log("Starting Game")
 
   game.loadMap();

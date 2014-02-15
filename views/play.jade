@@ -12,7 +12,8 @@ block content
     script(type="text/javascript", src="/javascripts/socket.js")
     div(class="full play")
         div(class="container play-container")
-            img(src="/images/logo-small.png", class="logo-small")
+            a(href="/")
+                img(src="/images/logo-small.png", class="logo-small")
             div(class="row")
                 div(class="col-md-8 arena-container")
                     canvas(id="arenaCanvas", width="750", height="600", class="arena-canvas")
@@ -21,7 +22,7 @@ block content
                     hr
                     div(class="textarea-container")
                         textarea(cols="40", rows="25", class="arena-textarea", id="textarea").
-                            alert('YOLO!');
+                            alert('Hello #{name}!');
                     button(class="btn btn-warning", onclick="submitActions()") Submit
     script.
         var cm = 'hello';

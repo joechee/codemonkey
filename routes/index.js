@@ -4,12 +4,13 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
+	res.render('index');
 };
 
 
 exports.play = function(req, res){
-  res.render('play', { title: 'Express' });
+	var name = req.query.n ? req.query.n : 'Monkey';
+  	res.render('play', { name: name });
 };
 
 exports.testsocket = function(req, res) {

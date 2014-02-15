@@ -5,7 +5,7 @@ html, body {
 	width: 100%;
 }
 
-h2, p {
+h2, p, input {
 	font-family: 'peachy-keen', verdana, sans-serif;
 	color: #ffcb2d;
 }

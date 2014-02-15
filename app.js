@@ -42,8 +42,8 @@ app.get('/models.js', function (req,res) {
 });
 
 app.post('/', function (req, res) {
-	var name = req.body.name;
-	// Handle name and add to game
+	var name = req.body['name'];	
+	res.redirect('/play?n=' + name);
 });
 
 // Server setups

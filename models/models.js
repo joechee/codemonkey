@@ -15,12 +15,17 @@ try {
   var RIGHT = 1;
   var LEFT = 2;
   var DOWN = 3;
+
   var directions = [
-    "0,-1",
-    "1,0",
-    "0,1",
-    "-1,0"
+    [0, -1],
+    [1, 0],
+    [0, -1],
+    [-1, 0]
   ];
+
+  // Serialize directions so that indexOf can be used
+  var serializedDirections = directions.map(function (direction) { return direction.toString();});
+
 
   function IDGenerator() {
     this.currentID = 0;
@@ -147,7 +152,7 @@ try {
     var changeX = this.x - oldX;
     var changeY = this.y - oldY;
 
-    this.direction = directions.indexOf([changeX, changeY].toString()); 
+    this.direction = serializedDirections.indexOf([changeX, changeY].toString()); 
     if (this.direction === -1) {
       throw new Error("Direction is borked!");
     }

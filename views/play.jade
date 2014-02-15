@@ -8,11 +8,13 @@ block content
     script(type="text/javascript", src="/javascripts/codemirror.js")
     script(type="text/javascript", src="/javascripts/javascript.js")
     script(type="text/javascript", src="/javascripts/matchbrackets.js")
+    script(type="text/javascript", src="/javascripts/socket.js")
     script(type="text/javascript", src="models.js")
     script(type="text/javascript", src="/javascripts/client.js")
     div(class="full play")
         div(class="container play-container")
-            img(src="/images/logo-small.png", class="logo-small")
+            a(href="/")
+                img(src="/images/logo-small.png", class="logo-small")
             div(class="row")
                 div(class="col-md-8 arena-container")
                     canvas(id="arenaCanvas", width="750", height="600", class="arena-canvas")
@@ -21,7 +23,7 @@ block content
                     hr
                     div(class="textarea-container")
                         textarea(cols="40", rows="25", class="arena-textarea", id="textarea").
-                            alert('YOLO!');
+                            alert('Hello #{name}!');
                     button(class="btn btn-warning", onclick="submitActions()") Submit
     script.
         var cm = 'hello';

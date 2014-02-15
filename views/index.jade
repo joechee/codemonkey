@@ -1,4 +1,14 @@
 extends layout
 
 block content
-	h1 Hello World
+    div(class="full landing")
+        div(class="container landing-container")
+            img(src="/images/logo.png", class="logo")
+            h2(class="text") Enter Your Name Below
+            form(name="landing-form" action="/", method="post")
+                input(type="text", class="name", name="name")
+                input(type="submit", style="display:none")
+
+        script 
+            $(function() { $('.logo').addClass('animated swing');})
+

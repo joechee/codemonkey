@@ -1,8 +1,131 @@
 html, body {
 	min-width: 100%;
 	min-height: 100%;
-	background-image: url('../images/background.jpg');
+	height: 100%;
+	width: 100%;
+}
+
+* {
+	font-family: 'peachy-keen', verdana, sans-serif;
+}
+
+.full {
+	min-width: 100%;
+	min-height: 100%;
 	background-size: cover;
+}
+
+.landing {
+	background-image: url('../images/background-landing.jpg');
+}
+
+.landing .logo {
+	display: block;
+	margin: 10px auto;
+	margin-top: 80px;
+	height: 400px;
+}
+
+.animated {
+	-webkit-animation-duration: 2s;
+	animation-duration: 2s;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+
+@-webkit-keyframes swing {
+  20% {
+    -webkit-transform: rotate(15deg);
+    transform: rotate(15deg);
+  }
+
+  40% {
+    -webkit-transform: rotate(-10deg);
+    transform: rotate(-10deg);
+  }
+
+  60% {
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg);
+  }
+
+  80% {
+    -webkit-transform: rotate(-5deg);
+    transform: rotate(-5deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes swing {
+  20% {
+    -webkit-transform: rotate(15deg);
+    -ms-transform: rotate(15deg);
+    transform: rotate(15deg);
+  }
+
+  40% {
+    -webkit-transform: rotate(-10deg);
+    -ms-transform: rotate(-10deg);
+    transform: rotate(-10deg);
+  }
+
+  60% {
+    -webkit-transform: rotate(5deg);
+    -ms-transform: rotate(5deg);
+    transform: rotate(5deg);
+  }
+
+  80% {
+    -webkit-transform: rotate(-5deg);
+    -ms-transform: rotate(-5deg);
+    transform: rotate(-5deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+}
+
+.swing {
+  -webkit-transform-origin: top center;
+  -ms-transform-origin: top center;
+  transform-origin: top center;
+  -webkit-animation-name: swing;
+  animation-name: swing;
+}
+
+.landing .landing-container {
+	text-align: center;
+}
+
+.landing .name {
+	background-color: rgba(255, 244, 215, 0.5);
+	font-size: 32px;
+	padding: 5px;
+	color: #000;
+	outline: none !important;
+	-webkit-appearance: none;
+	text-align: center;
+	border: none;
+}
+
+.landing .landing-container .text {
+	color: #fff;
+	font-size: 36px;
+	text-align: center;
+	-moz-text-shadow: 0 0 20px #000;
+	-webkit-text-shadow: 0 0 20px #000;
+	text-shadow: 0px 0px 20px #000;
+}
+
+.play {
+	background-image: url('../images/background-play.jpg');
 }
 
 a {

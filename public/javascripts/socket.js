@@ -1,4 +1,4 @@
-var socket = io.connect(window.location);
+var socket = io.connect('http://' + window.location.host);
 
 
 function registerPlayer(name, callback) {

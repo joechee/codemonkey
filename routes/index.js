@@ -9,8 +9,8 @@ exports.index = function(req, res){
 
 
 exports.play = function(req, res){
-	console.log(req.query.name);
-  	res.render('play', { name: req.query.n });
+	var name = req.query.n ? req.query.n : 'Monkey';
+  	res.render('play', { name: name });
 };
 
 exports.testsocket = function(req, res) {

@@ -130,8 +130,8 @@ try {
     this.id = id || idgen.generate();
     this.gameState.registerPlayer(this);
     do {
-      this.x = Math.floor(Math.random() * MAP_SIZE[0];
-      this.y = Math.floor(Math.random() * MAP_SIZE[1];
+      this.x = Math.floor(Math.random() * MAP_SIZE[0]);
+      this.y = Math.floor(Math.random() * MAP_SIZE[1]);
     } while (this.checkCollision());
     this.direction = Math.floor(Math.random() * 4);
     this.HP = 3;

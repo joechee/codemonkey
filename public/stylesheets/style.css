@@ -1,10 +1,14 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+html, body {
+	min-width: 100%;
+	min-height: 100%;
 }
 
 a {
   color: #00b7ff;
+}
+
+.arena-container {
+	background-color: black;
 }
 
 

@@ -1,21 +1,20 @@
 module.exports = function(gameState, io) {
     var models = require('../models/models.js');
     io.sockets.on('connection', function (socket) {
+        var player = new models.Player(gameState);
+        socket.player = player;
         onRegisterPlayer(socket);
     });
 
     function onRegisterPlayer(socket) {
         socket.on('registerPlayer', function(data) {
-            var player = new models.Player(gameState);
-            socket.player = player;
-
-            socket.emit('gameReady', player.serialize());
+            socket.emit('gameReady', socket.player.serialize());
             broadcastGameStateLoop();
         });
 
         socket.on('playerMove', function(data) {
             if (socket.player.id == data.playerId) {
-                gameState.players[data.playerId].move(data.x, data.y);
+                gameState.players[data.playerId].move(data.direction);
             }
         });
 

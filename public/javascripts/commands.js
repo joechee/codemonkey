@@ -17,7 +17,7 @@
 
     function makeMove(id, direction) {
         return function() {
-            socket.emit('playerMove', {playerId: id, x: DIRECTIONS[direction][0], y: DIRECTIONS[direction][1]});
+            socket.emit('playerMove', {playerId: id, direction: direction});
         }
     }
 

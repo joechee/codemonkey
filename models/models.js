@@ -102,9 +102,11 @@ try {
     }
     for (var i in obj2) {
       if (!obj[i] && type === "player") {
-        new Player(gameState, obj2[i].id);
+        var player = new Player(gameState, obj2[i].id);
+        player.unserialize(obj2[i]);
       } else if (!obj[i] && type === "projectile") {
-        new Projectile(gameState, obj2[i].id);
+        var projectile = new Projectile(gameState, obj2[i].id);
+        projectile.unserialize(obj2[i]);
       }
     } 
   }
@@ -133,7 +135,13 @@ try {
       }
     }
     return obj;
-  };
+  }
+
+  Player.prototype.unserialize = function(data) {
+    for (var i in data) {
+      this[i] = data[i];
+    }
+  }
 
   Player.prototype.move = function(direction) {
     if (this.gameState === undefined) {
@@ -246,6 +254,12 @@ try {
     }
     return obj;
   };
+
+  Projectile.prototype.unserialize = function(data) {
+    for (var i in data) {
+      this[i] = data[i];
+    }
+  }
   
   window.Player = Player;
   window.Projectile = Projectile;

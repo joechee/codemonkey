@@ -27,7 +27,7 @@ var Client = function () {
 
 GameConfig = {
   tileSize: 20,
-  padding: 2,
+  padding: 1,
   playerSize: 18,
   chaseZoom: 1.0,
   doChaseCam: false,
@@ -73,7 +73,7 @@ Game.prototype.loadMap = function () {
   for (var i=0;i<this.rows;i++) {
     for (var j=0;j<this.cols;j++) {
       var tile = new createjs.Shape();
-      tile.graphics.beginFill("#ffcb2d").drawRect(0, 0, GameConfig.tileSize, GameConfig.tileSize);
+      tile.graphics.beginFill("rgba(164, 123, 0, 0.8)").drawRect(0, 0, GameConfig.tileSize, GameConfig.tileSize);
       //var computedAlpha = Math.abs(i-this.rows)/this.rows;
       //tile.alpha = computedAlpha;
       var pt = xyToPix({x:j,y:i});
@@ -235,9 +235,11 @@ var Player = function(data) {
   this.name = data.name;
 
   // Easeljs stuff
-  this.view = new createjs.Shape();
+  this.view = new createjs.Bitmap('/images/monkey.png');
   var leftPadding = Math.abs(GameConfig.tileSize - GameConfig.playerSize) / 2;
-  this.view.graphics.beginFill("#00ff00").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
+  this.view.scaleX = 0.5;
+  this.view.scaleY = 0.5;
+  // this.view.graphics.beginFill("#00ff00").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
 
   var xy = xyToPix(data);
   this.view.x = xy.x;

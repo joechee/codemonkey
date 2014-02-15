@@ -52,13 +52,14 @@
 .CodeMirror-gutter {
   position: absolute; left: 0; top: 0;
   z-index: 10;
-  background-color: #f7f7f7;
-  border-right: 1px solid #eee;
+  background-color: #ffcb2d;
+  border-right: 1px solid #9e7702;
   min-width: 2em;
   height: 100%;
 }
 .CodeMirror-gutter-text {
-  color: #aaa;
+  color: #9e7702;
+  font-weight: bold;
   text-align: right;
   padding: .4em .2em .4em .4em;
   white-space: pre !important;

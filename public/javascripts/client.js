@@ -219,7 +219,6 @@ Game.prototype.updateProjectile = function (data) {
 }
 
 Game.prototype.removeProjectile = function (projectile) {
-  console.log('sdfasdfahsldkfajflajshasf');
   this.projectiles[projectile.id] = undefined;
   delete this.projectiles[projectile.id];
   this.stage.removeChild(projectile.view);

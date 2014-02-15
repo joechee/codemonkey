@@ -1,14 +1,13 @@
 module.exports = function(gameState, io) {
     var models = require('../models/models.js');
     io.sockets.on('connection', function (socket) {
-        var player = new models.Player(gameState);
-        socket.player = player;
         onRegisterPlayer(socket);
     });
 
     function onRegisterPlayer(socket) {
         socket.on('registerPlayer', function(data) {
             var player = new models.Player(gameState);
+            socket.player = player;
 
             socket.emit('gameReady', player.serialize());
             broadcastGameStateLoop();

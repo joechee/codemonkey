@@ -1,5 +1,3 @@
-var socket = io.connect(window.location);
-
 var Client = function () {
   var arenaCanvas = document.getElementById('arenaCanvas');
 
@@ -17,34 +15,10 @@ var Client = function () {
   game.loadMap();
   game.updateWorld();
 
-  socket.emit('registerPlayer', {name: name});
   registerPlayer('hello', function(player) {
     console.log(player);
     game.start();
   });
-
-/*
-  // ===== Add Player Test code here
-  var p = {
-    id: 1234,
-    name: 'test',
-    HP: 3,
-    direction: 0, // 0 - Up, 1 - Right, 2 - Down, 3 - Left
-    x: 5,
-    y: 5
-  };
-
-  this.game = game;
-  if (this.readyFunction) {
-    this.readyFunction(this.game);
-  }
-
-  game.addPlayer(p);
-  // =====
-
-  game.start();
-  console.log("Loaded Game")
-  */
 };
 
 Client.prototype.onReadyFunction = function(readyFunction) {

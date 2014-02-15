@@ -10,7 +10,7 @@ module.exports = function(gameState, io) {
     function floodCheck() {
         var time = new Date().getTime();
 
-        if (time - lastEmitTime < 10) {
+        if (time - lastEmitTime < 100) {
             return false;
         }
 

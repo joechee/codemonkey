@@ -1,9 +1,14 @@
 extends layout
 
 block content
-    script(type="text/javascript" src="javascripts/underscore-min.js")
-    script(type="text/javascript" src="javascripts/createjs-min.js")
-    script(type="text/javascript" src="javascripts/client.js")
+    link(href="/stylesheets/codemirror.css", rel="stylesheet")
+    link(href="/stylesheets/twilight.css", rel="stylesheet")
+    script(type="text/javascript", src="/javascripts/underscore-min.js")
+    script(type="text/javascript", src="/javascripts/createjs-min.js")
+    script(type="text/javascript", src="/javascripts/client.js")
+    script(type="text/javascript", src="/javascripts/codemirror.js")
+    script(type="text/javascript", src="/javascripts/javascript.js")
+    script(type="text/javascript", src="/javascripts/matchbrackets.js")
     div(class="full play")
         div(class="container play-container")
             img(src="/images/logo-small.png", class="logo-small")
@@ -13,4 +18,14 @@ block content
                 div(class="col-md-4")
                     h2 Write Code
                     hr
-                    textarea(cols="40", rows="25", class="arena-textarea")
+                    textarea(cols="40", rows="25", class="arena-textarea").
+                        me.moveForward(5);
+                        me.moveLeft(10);
+    script.
+        $(function() { var myCodeMirror = CodeMirror.fromTextArea(document.querySelector('.arena-textarea'), {
+                lineNumbers: true,
+                matchBrackets: true, 
+                mode: 'javascript',
+                theme: 'twilight',
+            }).setSize(null, 400);
+        });

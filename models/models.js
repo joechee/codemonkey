@@ -57,7 +57,9 @@
   };
 
 
-  Player.prototype.
+  Player.prototype.shoot = function (direction) {
+    // TODO: Implement projectile
+  };
 
   function Projectile() {
   }

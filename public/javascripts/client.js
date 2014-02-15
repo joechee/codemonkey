@@ -13,12 +13,12 @@ var Client = function () {
 
   // ===== Add Player Test code here
   var p = {
-    id: '1234',
+    id: 1234,
     name: 'test',
     HP: 3,
     direction: 0, // 0 - Up, 1 - Right, 2 - Down, 3 - Left
-    x: 0,
-    y: 0
+    x: 20,
+    y: 20 
   };
 
   game.addPlayer(p);
@@ -31,7 +31,8 @@ var Client = function () {
 GameConfig = {
   tileSize: 20,
   padding: 2,
-  playerSize: 18
+  playerSize: 18,
+  doChaseCam: true
 };
 
 var xyToPix = function(pt) {
@@ -50,8 +51,9 @@ var Game = function (stage) {
   this.score = {};
 
   // Map
-  this.rows = 40;
-  this.cols = 30;
+  this.rows = Math.floor(stage.canvas.height/(GameConfig.tileSize+GameConfig.padding)); //40;
+  this.cols = Math.floor(stage.canvas.width/(GameConfig.tileSize+GameConfig.padding)); //30;
+  console.log('Game map started with ',this.rows, this.cols);
 
   createjs.Ticker.addEventListener('tick', _.bind(this.handleTick, this));
 }
@@ -101,22 +103,28 @@ Game.prototype.handleTick = function(ticker_data) {
       this.gameEndEffect.tick(timestep);
     }
   }
+  
+  // Chase Cam - Currently hardcoded to chase Player id:1234
+  if (GameConfig.doChaseCam) {
+    this.stage.scaleX = 1.0;
+    this.stage.scaleY = 1.0;
+    var chased = _.find(this.players, function(p){return p.id == 1234;});
+    xy = xyToPix({x:chased.x, y:chased.y});
+    var leftOffset = this.stage.canvas.width / 2;
+    var topOffset = this.stage.canvas.height / 2;
 
-  //console.log("Update stage")
-  if (this.stage.mouseInBounds) {
-    this.stage.scaleX = 2.0;
-    this.stage.scaleY = 2.0;
-    this.stage.regX = this.stage.mouseX;
-    this.stage.regY = this.stage.mouseY;
+    this.stage.regX = xy.x - leftOffset;
+    this.stage.regY = xy.y - topOffset;
+
   } else {
+
     this.stage.scaleX = 1.0;
     this.stage.scaleY = 1.0;
     this.stage.regX = 0;
     this.stage.regY = 0;
   }
+
   this.stage.update();
-  //console.log("mouse: ",this.stage.mouseX, this.stage.mouseY);
-  //console.log("stage: ",this.stage.regX, this.stage.regY);
 }
 
 Game.prototype.updateWorld = function () {
@@ -129,6 +137,7 @@ Game.prototype.updateWorld = function () {
 
 Game.prototype.addPlayer = function (data) {
   var newPlayer = new Player(data);
+  this.players.push(newPlayer);
   this.stage.addChild(newPlayer.view);
 }
 

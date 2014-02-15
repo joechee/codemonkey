@@ -4923,6 +4923,7 @@ window.CodeMirror = (function() {
     remove: function(at, n) { this.removeInner(at - this.first, n); },
 
     getValue: function(lineSep) {
+      console.log(this.first);
       var lines = getLines(this, this.first, this.first + this.size);
       if (lineSep === false) return lines;
       return lines.join(lineSep || "\n");

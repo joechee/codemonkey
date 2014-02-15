@@ -9,18 +9,23 @@ try {
 }
 (function (window) {
   
-  var MAP_SIZE = [10, 10];
+  var MAP_SIZE = [40, 30];
   
   var UP = 0;
   var RIGHT = 1;
   var LEFT = 2;
   var DOWN = 3;
+
   var directions = [
-    "0,-1",
-    "1,0",
-    "0,1",
-    "-1,0"
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+    [0, 1]
   ];
+
+  // Serialize directions so that indexOf can be used
+  var serializedDirections = directions.map(function (direction) { return direction.toString();});
+
 
   function IDGenerator() {
     this.currentID = 0;
@@ -97,9 +102,11 @@ try {
     }
     for (var i in obj2) {
       if (!obj[i] && type === "player") {
-        new Player(gameState, obj2[i].id);
+        var player = new Player(gameState, obj2[i].id);
+        player.unserialize(obj2[i]);
       } else if (!obj[i] && type === "projectile") {
-        new Projectile(gameState, obj2[i].id);
+        var projectile = new Projectile(gameState, obj2[i].id);
+        projectile.unserialize(obj2[i]);
       }
     } 
   }
@@ -128,26 +135,40 @@ try {
       }
     }
     return obj;
-  };
+  }
 
-  Player.prototype.move = function (x, y) {
+  Player.prototype.unserialize = function(data) {
+    for (var i in data) {
+      this[i] = data[i];
+    }
+  }
+
+  Player.prototype.move = function(direction) {
     if (this.gameState === undefined) {
       throw new Error("Game State not defined!");
     }
-    var oldX = this.x;
-    var oldY = this.y;
-    this.x = x;
-    this.y = y;
-   
-    if (this.checkCollision()) {
-      return false;
+
+    if (direction < 0 || direction > 3) {
+      throw new Error("Invalid direction");
     }
 
-    
-    var changeX = this.x - oldX;
-    var changeY = this.y - oldY;
+    var delta = directions[direction];
+    return this.moveTo(this.x+delta[0], this.y+delta[1]);
+  }
 
-    this.direction = directions.indexOf([changeX, changeY].toString()); 
+  Player.prototype.moveTo = function (x, y) {
+    if (this.gameState === undefined) {
+      throw new Error("Game State not defined!");
+    }
+
+    if (this.checkCollision(x, y)) {
+      return false;
+    }
+    
+    var changeX = x - this.x;
+    var changeY = y - this.y;
+
+    this.direction = serializedDirections.indexOf([changeX, changeY].toString()); 
     if (this.direction === -1) {
       throw new Error("Direction is borked!");
     }
@@ -158,12 +179,22 @@ try {
   };
 
   // Returns true if there is a collision
-  Player.prototype.checkCollision = function () {
-    for (var i = 0; i < this.gameState.players.length; i++) {
-      if (this.gameState.players[i] !== this &&
-          (this.gameState.players[i].x === this.x || 
-          this.gameState.players[i].y === this.y)) {
-        return true;
+  Player.prototype.checkCollision = function (x, y) {
+    for (var key in this.gameState.players) {
+      if (this.gameState.players.hasOwnProperty(key)) {
+        var player = this.gameState.players[key];
+        if (player !== this &&
+            (player.x === x && 
+            player.y === y)) {
+          return true;
+        }
+        if (x < 0 ||
+            y < 0 ||
+            x > MAP_SIZE[0] ||
+            y > MAP_SIZE[1]) {
+          // TODO: Fix bounds for player movement 
+          return "wall";
+        }
       }
     }
     return false;
@@ -177,6 +208,7 @@ try {
                                     direction,
                                     this);
   };
+
 
   function Projectile(gameState, x, y, direction, owner) {
     if (!gameState || !x || !y || !direction || !owner) {
@@ -203,7 +235,7 @@ try {
     }
   };
 
-  Projectile.prototype.checkCollision = function () {
+  Projectile.prototype.checkCollision = function (x, y) {
     for (var i = 0; i < this.gameState.players.length; i++) {
       if (this.gameState.players[i].x === x || 
           this.gameState.players[i].y === y) {
@@ -229,6 +261,12 @@ try {
     }
     return obj;
   };
+
+  Projectile.prototype.unserialize = function(data) {
+    for (var i in data) {
+      this[i] = data[i];
+    }
+  }
   
   window.Player = Player;
   window.Projectile = Projectile;

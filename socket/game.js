@@ -1,30 +1,44 @@
-module.exports = function(gameEngine, io) {
+module.exports = function(gameState, io) {
     var models = require('../models/models.js');
     io.sockets.on('connection', function (socket) {
-        var player = new models.Player(gameEngine);
+        var player = new models.Player(gameState);
         socket.player = player;
         onRegisterPlayer(socket);
-
-        socket.on('players', function(data) {
-            console.log('here');
-            socket.emit('message', gameState.players);
-        })
     });
+
+    var lastEmitTime = 0;
+    function floodCheck() {
+        var time = new Date().getTime();
+
+        if (time - lastEmitTime < 200) {
+            return false;
+        }
+
+        lastEmitTime = time;
+        return true;
+    }
+
+    function broadcastGameState(socket) {
+        io.sockets.emit('gameState', gameState.serialize());
+    }
 
     function onRegisterPlayer(socket) {
         socket.on('registerPlayer', function(data) {
-            var player = new PlayerModel(0, 0, 1);
-            gameState.registerPlayer(player);
+            socket.emit('gameReady', socket.player.serialize());
+            broadcastGameState(socket);
         });
-        function broadcastGameStateLoop() {
-            setTimeout(function broadcastGameState () {
-                socket.emit('gameState', gameEngine.serialize());
-                broadcastGameStateLoop();
-            }, 1000);
-        }
+
+        socket.on('playerMove', function(data) {
+            if (socket.player.id == data.playerId) {
+                if (floodCheck()) {
+                    gameState.players[data.playerId].move(data.direction);
+                    broadcastGameState(socket);
+                }
+            }
+        });
+
         socket.on('disconnect', function () {
-          gameEngine.deregisterPlayer(socket.player);
+          gameState.deregisterPlayer(socket.player);
         });
-        broadcastGameStateLoop();
     }
 };

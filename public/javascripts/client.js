@@ -1,3 +1,5 @@
+var socket = io.connect(window.location);
+
 var Client = function () {
   var arenaCanvas = document.getElementById('arenaCanvas');
 
@@ -10,6 +12,7 @@ var Client = function () {
   console.log("Starting Game")
 
   game.loadMap();
+  game.updateWorld();
 
   // ===== Add Player Test code here
   var p = {
@@ -17,8 +20,8 @@ var Client = function () {
     name: 'test',
     HP: 3,
     direction: 0, // 0 - Up, 1 - Right, 2 - Down, 3 - Left
-    x: 20,
-    y: 20 
+    x: 5,
+    y: 5
   };
 
   game.addPlayer(p);
@@ -32,7 +35,7 @@ GameConfig = {
   tileSize: 20,
   padding: 2,
   playerSize: 18,
-  doChaseCam: true
+  doChaseCam: false
 };
 
 var xyToPix = function(pt) {
@@ -40,8 +43,8 @@ var xyToPix = function(pt) {
 }
 
 var Game = function (stage) {
-  this.players = [];
-  this.projectiles = [];
+  this.players = {};
+  this.projectiles = {};
   this.stage = stage;
   this.timePassed = 0;
   this.state = "LOADING";
@@ -50,10 +53,18 @@ var Game = function (stage) {
   this.cooldownTime = 5;
   this.score = {};
 
+  this.gameState = new GameState();
+
+  var that = this;
+  socket.on('gameState', function(data) {
+    that.gameState.unserialize(data);
+  });
+
   // Map
-  this.rows = Math.floor(stage.canvas.height/(GameConfig.tileSize+GameConfig.padding)); //40;
-  this.cols = Math.floor(stage.canvas.width/(GameConfig.tileSize+GameConfig.padding)); //30;
+  this.rows = 30; // Math.floor(stage.canvas.height/(GameConfig.tileSize+GameConfig.padding)); 
+  this.cols = 40; // Math.floor(stage.canvas.width/(GameConfig.tileSize+GameConfig.padding));
   console.log('Game map started with ',this.rows, this.cols);
+
 
   createjs.Ticker.addEventListener('tick', _.bind(this.handleTick, this));
 }
@@ -63,8 +74,8 @@ Game.prototype.loadMap = function () {
     for (var j=0;j<this.cols;j++) {
       var tile = new createjs.Shape();
       tile.graphics.beginFill("#ffcb2d").drawRect(0, 0, GameConfig.tileSize, GameConfig.tileSize);
-      var computedAlpha = Math.abs(i-this.rows)/this.rows;
-      tile.alpha = computedAlpha;
+      //var computedAlpha = Math.abs(i-this.rows)/this.rows;
+      //tile.alpha = computedAlpha;
       var pt = xyToPix({x:j,y:i});
       tile.x = pt.x;
       tile.y = pt.y;
@@ -75,8 +86,12 @@ Game.prototype.loadMap = function () {
 
 Game.prototype.restart = function () {
   // Clear all players and projectile
-  this.players.map(function (p) { p.die() });
-  this.projectiles.map(function (p) { p.die() });
+  for (var id in this.players) {
+    this.players[id].die();
+  }
+  for (var id in this.projectiles) {
+    this.projectiles[id].die();
+  }
 }
 
 
@@ -91,8 +106,12 @@ Game.prototype.handleTick = function(ticker_data) {
   this.updateWorld();
 
   if (this.state === "PLAYING") {
-    this.players.map(function (p) {p.tick();});
-    this.projectiles.map(function(p){p.tick();});
+    for (var id in this.players) {
+      this.players[id].tick();
+    }
+    for (var id in this.projectiles) {
+      this.projectiles[id].tick();
+    }
 
     this.timePassed += timestep;
     if (this.timePassed >= this.roundTime) { this.end(); }
@@ -128,23 +147,78 @@ Game.prototype.handleTick = function(ticker_data) {
 }
 
 Game.prototype.updateWorld = function () {
-  // Socket code to retrieve players and projectile positions
-  
-  // Add New Player objects
-  
-  // Update Existing Players
+  // Update Players
+  for (var id in this.gameState.players) {
+    if (!this.players[id]) {
+      // These are new player
+      this.addPlayer(this.gameState.players[id]);
+    } else {
+      this.updatePlayer(this.gameState.players[id]);
+    }
+  }
+  for (var id in this.players) {
+    if (!this.gameState.players[id]) {
+      // These are removed players
+      this.removePlayer(this.players[id]);
+    }
+  }
+
+  // Update Projectile
+  for (var id in this.gameState.projectiles) {
+    if (!this.projectiles[id]) {
+      // These are new player
+      this.addProjectile(this.gameState.projectiles[id]);
+    } else {
+      this.updateProjectile(this.gameState.projectiles[id]);
+    }
+  }
+  for (var id in this.projectiles) {
+    if (!this.gameState.projectiles[id]) {
+      // These are removed projectiles
+      this.removeProjectile(this.projectiles[id]);
+    }
+  }
 }
 
 Game.prototype.addPlayer = function (data) {
   var newPlayer = new Player(data);
-  this.players.push(newPlayer);
+  this.players[newPlayer.id] = newPlayer;
   this.stage.addChild(newPlayer.view);
 }
 
+Game.prototype.updatePlayer = function (data) {
+  var id = data.id;
+  this.players[id].x = this.gameState.players[id].x;
+  this.players[id].y = this.gameState.players[id].y;
+}
+
 Game.prototype.removePlayer = function (player) {
-  this.players = _.filter(this.players, function(p) {return p.id != player.id;});
+  this.players[player.id] = undefined;
+  delete this.players[player.id];
   this.stage.removeChild(player.view);
 }
+
+Game.prototype.addProjectile = function (data) {
+  var newProjectile = new Projectile(data);
+  this.projectiles[newProjectile.id] = newProjectile;
+  this.stage.addChild(newProjectile.view);
+}
+
+Game.prototype.updateProjectile = function (data) {
+  var id = data.id;
+  this.projectiles[id].x = this.gameState.projectiles[id].x;
+  this.projectiles[id].y = this.gameState.projectiles[id].y;
+}
+
+Game.prototype.removeProjectile = function (projectile) {
+  this.projectiles[projectile.id] = undefined;
+  delete this.projectiles[projectile.id];
+  this.stage.removeChild(projectile.view);
+}
+
+// ----------
+// Player
+// ----------
 
 var Player = function(data) {
   this.data = data;
@@ -173,6 +247,41 @@ Player.prototype.tick = function () {
 }
 
 Player.prototype.die = function () {
+  this.alpha = 0;
+}
+
+// ----------
+// Projectile
+// ----------
+
+
+var Projectile = function(data) {
+  this.data = data;
+  this.id = data.id;
+  this.name = data.name;
+
+  // Easeljs stuff
+  this.view = new createjs.Shape();
+  var leftPadding = Math.abs(GameConfig.tileSize - GameConfig.playerSize) / 2;
+  this.view.graphics.beginFill("#00ff00").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
+
+  var xy = xyToPix(data);
+  this.view.x = xy.x;
+  this.view.y = xy.y
+
+  this.x = data.x;
+  this.y = data.y;
+
+  this.view.alpha = 1;
+}
+
+Projectile.prototype.tick = function () {
+  var xy = xyToPix({x:this.x, y:this.y});
+  this.view.x = xy.x;
+  this.view.y = xy.y
+}
+
+Projectile.prototype.die = function () {
   this.alpha = 0;
 }
 

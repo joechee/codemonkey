@@ -16,6 +16,7 @@ var Client = function () {
   game.updateWorld();
 
   registerPlayer('hello', function(socket, player) {
+    console.log(player);
     game.pid = player.id;
     game.player = player;
     game.start();

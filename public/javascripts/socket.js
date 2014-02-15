@@ -6,6 +6,7 @@ function registerPlayer(name) {
     socket.emit('registerPlayer', {name: name});
 }
 
+
 var test = 0;
 socket.on('gameState', function (data) {
   gameState.unserialize(data); 

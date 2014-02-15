@@ -1,5 +1,45 @@
 extends layout
 
 block content
-	div(class="container")
-        h1 Code Monkey
+    link(href="/stylesheets/codemirror.css", rel="stylesheet")
+    link(href="/stylesheets/twilight.css", rel="stylesheet")
+    script(type="text/javascript", src="/javascripts/underscore-min.js")
+    script(type="text/javascript", src="/javascripts/createjs-min.js")
+    script(type="text/javascript", src="/javascripts/client.js")
+    script(type="text/javascript", src="/javascripts/codemirror.js")
+    script(type="text/javascript", src="/javascripts/javascript.js")
+    script(type="text/javascript", src="/javascripts/matchbrackets.js")
+    div(class="full play")
+        div(class="container play-container")
+            img(src="/images/logo-small.png", class="logo-small")
+            div(class="row")
+                div(class="col-md-8 arena-container")
+                    canvas(id="arenaCanvas", width="750", height="600", class="arena-canvas")
+                div(class="col-md-4")
+                    h2 Write Code
+                    hr
+                    div(class="textarea-container")
+                        textarea(cols="40", rows="25", class="arena-textarea", id="textarea").
+                            alert('YOLO!');
+                    button(class="btn btn-warning", onclick="submitActions()") Submit
+    script.
+        var cm = 'hello';
+        var hello = 'hello';
+        $(function() { 
+            ta = document.getElementById('textarea');
+            cm = CodeMirror.fromTextArea(ta, {
+                lineNumbers: true,
+                matchBrackets: true, 
+                mode: 'javascript',
+                theme: 'twilight',
+                lineWrapping: true
+            });
+
+            cm.setSize(null, 400);
+        });
+
+        function submitActions() {
+            cm.save();
+            console.log(ta.value);
+            eval(ta.value);
+        }

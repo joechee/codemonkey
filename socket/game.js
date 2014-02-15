@@ -4,11 +4,17 @@ module.exports = function(gameEngine, io) {
         var player = new models.Player(gameEngine);
         socket.player = player;
         onRegisterPlayer(socket);
+
+        socket.on('players', function(data) {
+            console.log('here');
+            socket.emit('message', gameState.players);
+        })
     });
 
     function onRegisterPlayer(socket) {
         socket.on('registerPlayer', function(data) {
-            console.log(data);
+            var player = new PlayerModel(0, 0, 1);
+            gameState.registerPlayer(player);
         });
         function broadcastGameStateLoop() {
             setTimeout(function broadcastGameState () {

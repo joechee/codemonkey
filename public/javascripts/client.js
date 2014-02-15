@@ -302,12 +302,11 @@ Player.prototype.tick = function () {
 }
 
 Player.prototype.animateHit = function (stage) {
-  console.log('animateHit');
   // Blood
   var x = this.view.x;
   var y = this.view.y;
 
-  for (var i=0; i<100; i++) {
+  for (var i=0; i<20; i++) {
     var splat = new createjs.Shape();
     var splatSize = GameConfig.playerSize * 0.5 * Math.random();
     //splat.graphics.beginFill("#ff0000").drawRect(0, 0, splatSize, splatSize);

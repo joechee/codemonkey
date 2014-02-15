@@ -1,20 +1,21 @@
 module.exports = function(gameState, io) {
     var models = require('../models/models.js');
     io.sockets.on('connection', function (socket) {
+        socket.lastEmitTime = new Date();
         var player = new models.Player(gameState);
         socket.player = player;
         onRegisterPlayer(socket);
     });
-
     var lastEmitTime = 0;
-    function floodCheck() {
+    function floodCheck(socket) {
+
         var time = new Date().getTime();
 
-        if (time - lastEmitTime < 100) {
+        if (time - socket.lastEmitTime < 100) {
             return false;
         }
 
-        lastEmitTime = time;
+        socket.lastEmitTime = time;
         return true;
     }
 
@@ -32,21 +33,21 @@ module.exports = function(gameState, io) {
         });
 
         socket.on('playerMove', function(data) {
+            if (!floodCheck(socket)) {
+                return;
+            }
             if (socket.player.id == data.playerId) {
-                if (floodCheck()) {
-                    gameState.players[data.playerId].move(data.direction);
-                    broadcastGameState();
-                }
+                gameState.players[data.playerId].move(data.direction);
+                broadcastGameState();
             }
         });
 
         socket.on('playerShoot', function(data) {
+            if (!floodCheck(socket)) { return; }
             if (socket.player.id == data.playerId) {
-                if (floodCheck()) {
-                  var projectile = gameState.players[data.playerId].shoot(data.direction);
-                  if (Object.keys(gameState.projectiles).length == 1) {
+                var projectile = gameState.players[data.playerId].shoot(data.direction);
+                if (Object.keys(gameState.projectiles).length == 1) {
                     gameState.updateProjectiles(broadcastGameState);
-                  }
                 }
             }
         });

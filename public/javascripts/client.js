@@ -10,10 +10,34 @@ var Client = function () {
   console.log("Starting Game")
 
   game.loadMap();
+
+  // ===== Add Player Test code here
+  var p = {
+    id: 1234,
+    name: 'test',
+    HP: 3,
+    direction: 0, // 0 - Up, 1 - Right, 2 - Down, 3 - Left
+    x: 20,
+    y: 20 
+  };
+
+  game.addPlayer(p);
+  // =====
+
   game.start();
   console.log("Loaded Game")
 };
 
+GameConfig = {
+  tileSize: 20,
+  padding: 2,
+  playerSize: 18,
+  doChaseCam: true
+};
+
+var xyToPix = function(pt) {
+  return {x:pt.x*(GameConfig.tileSize+GameConfig.padding),y:pt.y*(GameConfig.tileSize+GameConfig.padding)}
+}
 
 var Game = function (stage) {
   this.players = [];
@@ -27,10 +51,9 @@ var Game = function (stage) {
   this.score = {};
 
   // Map
-  this.rows = 40;
-  this.cols = 30;
-  this.tileSize = 20;
-  this.padding = 2;
+  this.rows = Math.floor(stage.canvas.height/(GameConfig.tileSize+GameConfig.padding)); //40;
+  this.cols = Math.floor(stage.canvas.width/(GameConfig.tileSize+GameConfig.padding)); //30;
+  console.log('Game map started with ',this.rows, this.cols);
 
   createjs.Ticker.addEventListener('tick', _.bind(this.handleTick, this));
 }
@@ -39,12 +62,12 @@ Game.prototype.loadMap = function () {
   for (var i=0;i<this.rows;i++) {
     for (var j=0;j<this.cols;j++) {
       var tile = new createjs.Shape();
-      tile.graphics.beginFill("#ffcb2d").drawRect(0, 0, this.tileSize, this.tileSize);
+      tile.graphics.beginFill("#ffcb2d").drawRect(0, 0, GameConfig.tileSize, GameConfig.tileSize);
       var computedAlpha = Math.abs(i-this.rows)/this.rows;
       tile.alpha = computedAlpha;
-
-      tile.x = i * (this.tileSize + this.padding);
-      tile.y = j * (this.tileSize + this.padding);
+      var pt = xyToPix({x:j,y:i});
+      tile.x = pt.x;
+      tile.y = pt.y;
       this.stage.addChild(tile);
     }
   }
@@ -80,22 +103,28 @@ Game.prototype.handleTick = function(ticker_data) {
       this.gameEndEffect.tick(timestep);
     }
   }
+  
+  // Chase Cam - Currently hardcoded to chase Player id:1234
+  if (GameConfig.doChaseCam) {
+    this.stage.scaleX = 1.0;
+    this.stage.scaleY = 1.0;
+    var chased = _.find(this.players, function(p){return p.id == 1234;});
+    xy = xyToPix({x:chased.x, y:chased.y});
+    var leftOffset = this.stage.canvas.width / 2;
+    var topOffset = this.stage.canvas.height / 2;
 
-  //console.log("Update stage")
-  if (this.stage.mouseInBounds) {
-    this.stage.scaleX = 2.0;
-    this.stage.scaleY = 2.0;
-    this.stage.regX = this.stage.mouseX;
-    this.stage.regY = this.stage.mouseY;
+    this.stage.regX = xy.x - leftOffset;
+    this.stage.regY = xy.y - topOffset;
+
   } else {
+
     this.stage.scaleX = 1.0;
     this.stage.scaleY = 1.0;
     this.stage.regX = 0;
     this.stage.regY = 0;
   }
+
   this.stage.update();
-  //console.log("mouse: ",this.stage.mouseX, this.stage.mouseY);
-  //console.log("stage: ",this.stage.regX, this.stage.regY);
 }
 
 Game.prototype.updateWorld = function () {
@@ -108,6 +137,7 @@ Game.prototype.updateWorld = function () {
 
 Game.prototype.addPlayer = function (data) {
   var newPlayer = new Player(data);
+  this.players.push(newPlayer);
   this.stage.addChild(newPlayer.view);
 }
 
@@ -117,25 +147,29 @@ Game.prototype.removePlayer = function (player) {
 }
 
 var Player = function(data) {
+  this.data = data;
   this.id = data.id;
   this.name = data.name;
 
   // Easeljs stuff
   this.view = new createjs.Shape();
-  this.view.graphics.beginFill("#ff0000").drawRect(0, 0, 100, 100);
+  var leftPadding = Math.abs(GameConfig.tileSize - GameConfig.playerSize) / 2;
+  this.view.graphics.beginFill("#00ff00").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
 
-  this.view.x = data.x;
-  this.view.y = data.y;
+  var xy = xyToPix(data);
+  this.view.x = xy.x;
+  this.view.y = xy.y
 
   this.x = data.x;
   this.y = data.y;
 
-  this.view.alpha = 0;
+  this.view.alpha = 1;
 }
 
 Player.prototype.tick = function () {
-  this.view.x = this.x;
-  this.view.y = this.y;
+  var xy = xyToPix({x:this.x, y:this.y});
+  this.view.x = xy.x;
+  this.view.y = xy.y
 }
 
 Player.prototype.die = function () {

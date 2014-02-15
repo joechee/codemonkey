@@ -160,17 +160,13 @@ try {
     if (this.gameState === undefined) {
       throw new Error("Game State not defined!");
     }
-    var oldX = this.x;
-    var oldY = this.y;
-    this.x = x;
-    this.y = y;
-   
-    if (this.checkCollision()) {
+
+    if (this.checkCollision(x, y)) {
       return false;
     }
     
-    var changeX = this.x - oldX;
-    var changeY = this.y - oldY;
+    var changeX = x - this.x;
+    var changeY = y - this.y;
 
     this.direction = serializedDirections.indexOf([changeX, changeY].toString()); 
     if (this.direction === -1) {
@@ -183,19 +179,22 @@ try {
   };
 
   // Returns true if there is a collision
-  Player.prototype.checkCollision = function () {
-    for (var i = 0; i < this.gameState.players.length; i++) {
-      if (this.gameState.players[i] !== this &&
-          (this.gameState.players[i].x === this.x || 
-          this.gameState.players[i].y === this.y)) {
-        return true;
-      }
-      if (this.gameState.players[i].x < 0 ||
-          this.gameState.players[i].y < 0 ||
-          this.gameState.players[i].x > MAP_SIZE[0] ||
-          this.gameState.players[i].y > MAP_SIZE[1]) {
-        // TODO: Fix bounds for player movement 
-        return "wall";
+  Player.prototype.checkCollision = function (x, y) {
+    for (var key in this.gameState.players) {
+      if (this.gameState.players.hasOwnProperty(key)) {
+        var player = this.gameState.players[key];
+        if (player !== this &&
+            (player.x === x && 
+            player.y === y)) {
+          return true;
+        }
+        if (x < 0 ||
+            y < 0 ||
+            x > MAP_SIZE[0] ||
+            y > MAP_SIZE[1]) {
+          // TODO: Fix bounds for player movement 
+          return "wall";
+        }
       }
     }
     return false;
@@ -236,7 +235,7 @@ try {
     }
   };
 
-  Projectile.prototype.checkCollision = function () {
+  Projectile.prototype.checkCollision = function (x, y) {
     for (var i = 0; i < this.gameState.players.length; i++) {
       if (this.gameState.players[i].x === x || 
           this.gameState.players[i].y === y) {

@@ -29,7 +29,7 @@ GameConfig = {
   padding: 2,
   playerSize: 18,
   chaseZoom: 1.5,
-  doChaseCam: true
+  doChaseCam: false
 };
 
 var xyToPix = function(pt) {

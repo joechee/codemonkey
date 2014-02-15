@@ -183,7 +183,7 @@ Game.prototype.updateWorld = function () {
         // Move Up
         this.updatePlayer(this.gameState.players[id], 0);
       } else {
-        //this.updatePlayer(this.gameState.players[id]. lastRotation);
+        this.updatePlayer(this.gameState.players[id], lastRotation);
       }
     }
   }
@@ -218,7 +218,6 @@ Game.prototype.addPlayer = function (data) {
 }
 
 Game.prototype.updatePlayer = function (data, rotation) {
-  console.log('updatePlayer');
   var id = data.id;
   this.players[id].x = this.gameState.players[id].x;
   this.players[id].y = this.gameState.players[id].y;
@@ -303,6 +302,7 @@ Player.prototype.tick = function () {
 }
 
 Player.prototype.animateHit = function (stage) {
+  console.log('animateHit');
   // Blood
   var x = this.view.x;
   var y = this.view.y;

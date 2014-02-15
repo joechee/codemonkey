@@ -20,6 +20,12 @@
 
   };
 
+  ClientPlayer.prototype.attack = function (direction) {
+
+  };
+
+  
+
 
   window.ClientPlayer = ClientPlayer;
 

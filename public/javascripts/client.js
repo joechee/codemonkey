@@ -9,7 +9,7 @@ var Client = function () {
 
   var stage = new createjs.Stage(arenaCanvas);
 
-  var game = new Game(stage);
+  game = new Game(stage);
   console.log("Starting Game")
 
   game.loadMap();
@@ -184,6 +184,7 @@ Game.prototype.updateWorld = function () {
 
 Game.prototype.addPlayer = function (data) {
   var newPlayer = new Player(data);
+  a = newPlayer;
   this.players[newPlayer.id] = newPlayer;
   this.stage.addChild(newPlayer.view);
 }
@@ -246,6 +247,25 @@ Player.prototype.tick = function () {
   var xy = xyToPix({x:this.x, y:this.y});
   this.view.x = xy.x;
   this.view.y = xy.y
+}
+
+Player.prototype.animateHit = function (stage, direction) {
+  var x = this.view.x + GameConfig.playerSize / 2;
+  var y = this.view.y + GameConfig.playerSize / 2;
+  
+  for (var i=0; i<100; i++) {
+    var splat = new createjs.Shape();
+    var splatSize = GameConfig.playerSize * 0.5 * Math.random();
+    splat.graphics.beginFill("#ff0000").drawRect(0, 0, splatSize, splatSize);
+    splat.x = x;
+    splat.y = y;
+    var offsetX = 30 * (Math.random() * 2.0 - 1);
+    var offsetY = 30 * (Math.random() * 2.0 - 1);
+
+    createjs.Tween.get(splat).to({x:x+offsetX, y:y+offsetY, alpha:0}, 500);
+    stage.addChild(splat);
+    setTimeout(function(){stage.removeChild(splat);delete splat;},520);
+  }
 }
 
 Player.prototype.die = function () {

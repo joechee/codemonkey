@@ -160,6 +160,8 @@ try {
   Player.prototype.move = function(direction) {
     if (this.gameState === undefined) {
       throw new Error("Game State not defined!");
+    } else if (this.HP <= 0) {
+      return; // player is dead
     }
 
     if (direction < 0 || direction > 3) {
@@ -173,6 +175,8 @@ try {
   Player.prototype.moveTo = function (x, y) {
     if (this.gameState === undefined) {
       throw new Error("Game State not defined!");
+    } else if (this.HP <= 0) {
+      return; // player is dead
     }
 
     if (this.checkCollision(x, y)) {
@@ -215,12 +219,30 @@ try {
 
 
   Player.prototype.shoot = function (direction) {
+    if (this.HP <= 0) {
+      return; // player is dead
+    }
     var projectile = new Projectile(this.gameState,
                                     this.x,
                                     this.y,
                                     direction,
                                     this);
     return projectile;
+  };
+
+  Player.prototype.takeDamage = function () {
+    this.HP--;
+    if (this.HP <= 0 && runner === "server") {
+      setTimeout(function () {
+        self.triggerRevive();
+      }, 1000);
+    }
+  };
+
+  Player.prototype.triggerRevive = function () {
+    if (this.HP <= 0 && runner === "server") {
+      this.HP = 3;
+    }
   };
 
 

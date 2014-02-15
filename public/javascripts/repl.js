@@ -7,13 +7,13 @@
 		setInterval: undefined,
 		setTimeout: undefined,
 		Function: undefined,
-		document: undefined
+		document: undefined,
 	};
 
 	function safeEval(code) {
 		var error = false;
 		setRunningTimeout();
-		data = document.playerCommands;
+		data.me = document.playerCommands;
 
 		try {
 			if (code === "") {

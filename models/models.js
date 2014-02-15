@@ -91,7 +91,7 @@
     var projectile = new Projectile(this.gameState,
                                     x + directions[direction][0],
                                     y + directions[direction][1],
-                                    direction
+                                    direction,
                                     this);
   };
 

@@ -26,6 +26,7 @@ module.exports = function(gameState, io) {
 
     function onRegisterPlayer(socket) {
         socket.on('registerPlayer', function(data) {
+            socket.player.name = data.name;
             socket.emit('gameReady', socket.player.serialize());
             broadcastGameState();
         });

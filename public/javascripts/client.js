@@ -15,7 +15,7 @@ var Client = function () {
   game.loadMap();
   game.updateWorld();
 
-  registerPlayer('hello', function(socket, player) {
+  registerPlayer(PLAYER_NAME, function(socket, player) {
     console.log(player);
     game.pid = player.id;
     game.player = player;

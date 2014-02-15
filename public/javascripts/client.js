@@ -301,9 +301,12 @@ var Projectile = function(data) {
   this.name = data.name;
 
   // Easeljs stuff
-  this.view = new createjs.Shape();
+  // this.view = new createjs.Shape();
+  this.view = new createjs.Bitmap('/images/banana.png');
+  this.view.scaleX = 0.1;
+  this.view.scaleY = 0.1;
   var leftPadding = Math.abs(GameConfig.tileSize - GameConfig.playerSize) / 2;
-  this.view.graphics.beginFill("#0000ff").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
+  // this.view.graphics.beginFill("#0000ff").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
 
   var xy = xyToPix(data);
   this.view.x = xy.x;
@@ -318,7 +321,13 @@ var Projectile = function(data) {
 Projectile.prototype.tick = function () {
   var xy = xyToPix({x:this.x, y:this.y});
   this.view.x = xy.x;
-  this.view.y = xy.y
+  this.view.y = xy.y;
+  // console.log(this.view);
+  this.view.regX = this.view.image.width/2;
+  // console.log(this.view.image.width/2 )
+  this.view.regY = this.view.image.height/2;
+  this.view.rotation += 5;
+  // console.log(this.angle);
 }
 
 Projectile.prototype.die = function () {

@@ -15,10 +15,12 @@ var Client = function () {
   game.loadMap();
   game.updateWorld();
 
-  registerPlayer('hello', function(player) {
+  registerPlayer('hello', function(socket, player) {
     game.pid = player.id;
     game.player = player;
     game.start();
+
+    document.playerCommands = new PlayerCommands(socket, player);
   });
 };
 

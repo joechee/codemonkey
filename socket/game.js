@@ -6,6 +6,18 @@ module.exports = function(gameState, io) {
         onRegisterPlayer(socket);
     });
 
+    var lastEmitTime = 0;
+    function floodCheck() {
+        var time = new Date().getTime();
+
+        if (time - lastEmitTime < 200) {
+            return false;
+        }
+
+        lastEmitTime = time;
+        return true;
+    }
+
     function broadcastGameState(socket) {
         io.sockets.emit('gameState', gameState.serialize());
     }
@@ -18,8 +30,10 @@ module.exports = function(gameState, io) {
 
         socket.on('playerMove', function(data) {
             if (socket.player.id == data.playerId) {
-                gameState.players[data.playerId].move(data.direction);
-                broadcastGameState(socket);
+                if (floodCheck()) {
+                    gameState.players[data.playerId].move(data.direction);
+                    broadcastGameState(socket);
+                }
             }
         });
 

@@ -41,6 +41,11 @@ app.get('/models.js', function (res) {
   res.sendfile(__dirname + '/models.js');
 });
 
+app.post('/', function (req, res) {
+	var name = req.body.name;
+	// Handle name and add to game
+});
+
 // Server setups
 var server = http.createServer(app);
 server.listen(app.get('port'), function() {

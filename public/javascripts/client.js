@@ -60,7 +60,7 @@ Game.prototype.loadMap = function () {
   for (var i=0;i<this.rows;i++) {
     for (var j=0;j<this.cols;j++) {
       var tile = new createjs.Shape();
-      tile.graphics.beginFill("#ff0000").drawRect(0, 0, GameConfig.tileSize, GameConfig.tileSize);
+      tile.graphics.beginFill("#ffcb2d").drawRect(0, 0, GameConfig.tileSize, GameConfig.tileSize);
       var computedAlpha = Math.abs(i-this.rows)/this.rows;
       tile.alpha = computedAlpha;
       var pt = xyToPix({x:j,y:i});

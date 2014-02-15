@@ -18,21 +18,35 @@ module.exports = function(gameState, io) {
         return true;
     }
 
-    function broadcastGameState(socket) {
+    function broadcastGameState() {
         io.sockets.emit('gameState', gameState.serialize());
     }
+
+    gameState.broadcastGameState = broadcastGameState;
 
     function onRegisterPlayer(socket) {
         socket.on('registerPlayer', function(data) {
             socket.emit('gameReady', socket.player.serialize());
-            broadcastGameState(socket);
+            broadcastGameState();
         });
 
         socket.on('playerMove', function(data) {
             if (socket.player.id == data.playerId) {
                 if (floodCheck()) {
                     gameState.players[data.playerId].move(data.direction);
-                    broadcastGameState(socket);
+                    broadcastGameState();
+                }
+            }
+        });
+
+        socket.on('playerShoot', function(data) {
+            if (socket.player.id == data.playerId) {
+                if (floodCheck()) {
+                  var projectile = gameState.players[data.playerId].shoot(data.direction);
+                  console.log('length asdfhas', Object.keys(gameState.projectiles).length);
+                  if (Object.keys(gameState.projectiles).length == 1) {
+                    gameState.updateProjectiles(broadcastGameState);
+                  }
                 }
             }
         });

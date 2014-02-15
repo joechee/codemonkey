@@ -263,7 +263,7 @@ var Projectile = function(data) {
   // Easeljs stuff
   this.view = new createjs.Shape();
   var leftPadding = Math.abs(GameConfig.tileSize - GameConfig.playerSize) / 2;
-  this.view.graphics.beginFill("#00ff00").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
+  this.view.graphics.beginFill("#0000ff").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
 
   var xy = xyToPix(data);
   this.view.x = xy.x;

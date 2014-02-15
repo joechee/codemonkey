@@ -2,7 +2,9 @@
 	// LOSING BATTLE HERE YO
 
 	function safeEval(code) {
+		var error = false;
 		setRunningTimeout();
+
 		try {
 			if (code === "") {
 				return;
@@ -24,9 +26,11 @@
 			}	
 		} catch (e) {
 			console.error(e);
+			error = true;
 		} finally {
 			window.data = undefined;
 		}
+		return !error;
 	}
 
 

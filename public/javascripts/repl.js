@@ -41,7 +41,7 @@
 				}
 
 				
-				var safeCode = "with(data){" + code + ";" + variableCode + "};";
+				var safeCode = "with(data){(function (){" + code + ";" + variableCode + "})()};";
 				var windowClone = {};
 
 				for (var i in window) {

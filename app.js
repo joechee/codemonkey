@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -9,6 +8,9 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var socket = require('socket.io');
+var models = require('./models/models.js');
+var gamesocket = require('./socket/game.js');
+
 
 var app = express();
 
@@ -35,6 +37,9 @@ app.get('/', routes.index);
 app.get('/play', routes.play);
 app.get('/users', user.list);
 app.get('/testsocket', routes.testsocket);
+app.get('/models.js', function (res) {
+  res.sendfile(__dirname + '/models.js');
+});
 
 // Server setups
 var server = http.createServer(app);
@@ -42,11 +47,4 @@ server.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
 var io = socket.listen(server);
-
-// Socket stuff
-io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});
+gamesocket(null, io);

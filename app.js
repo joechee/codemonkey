@@ -52,5 +52,6 @@ server.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
 var io = socket.listen(server);
+io.set('log level', 1);
 var gameState = new models.GameState();
 gamesocket(gameState, io);

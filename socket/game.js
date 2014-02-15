@@ -43,7 +43,6 @@ module.exports = function(gameState, io) {
             if (socket.player.id == data.playerId) {
                 if (floodCheck()) {
                   var projectile = gameState.players[data.playerId].shoot(data.direction);
-                  console.log('length asdfhas', Object.keys(gameState.projectiles).length);
                   if (Object.keys(gameState.projectiles).length == 1) {
                     gameState.updateProjectiles(broadcastGameState);
                   }
@@ -53,6 +52,7 @@ module.exports = function(gameState, io) {
 
         socket.on('disconnect', function () {
           gameState.deregisterPlayer(socket.player);
+          broadcastGameState();
         });
     }
 };

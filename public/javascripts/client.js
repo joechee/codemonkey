@@ -16,6 +16,8 @@ var Client = function () {
   game.updateWorld();
 
   registerPlayer('hello', function(player) {
+    game.pid = player.id;
+    game.player = player;
     console.log(player);
     game.start();
   });
@@ -34,7 +36,7 @@ GameConfig = {
   tileSize: 20,
   padding: 2,
   playerSize: 18,
-  doChaseCam: false
+  doChaseCam: true
 };
 
 var xyToPix = function(pt) {
@@ -51,6 +53,9 @@ var Game = function (stage) {
   this.roundTime = 300;
   this.cooldownTime = 5;
   this.score = {};
+
+  this.pid = undefined;
+  this.player = undefined;
 
   this.gameState = new GameState();
 
@@ -126,13 +131,16 @@ Game.prototype.handleTick = function(ticker_data) {
   if (GameConfig.doChaseCam) {
     this.stage.scaleX = 1.0;
     this.stage.scaleY = 1.0;
-    var chased = _.find(this.players, function(p){return p.id == 1234;});
+
+    var chased = this.players[this.pid];
     xy = xyToPix({x:chased.x, y:chased.y});
     var leftOffset = this.stage.canvas.width / 2;
     var topOffset = this.stage.canvas.height / 2;
 
-    this.stage.regX = xy.x - leftOffset;
-    this.stage.regY = xy.y - topOffset;
+    createjs.Tween.removeTweens(this.stage);
+    createjs.Tween.get(this.stage, {override:true})
+    .to({ regX : xy.x - leftOffset,
+          regY : xy.y - topOffset }, 200, createjs.Ease.linear);
 
   } else {
 

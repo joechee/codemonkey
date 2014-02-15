@@ -160,9 +160,11 @@ Game.prototype.handleTick = function(ticker_data) {
 Game.prototype.updateWorld = function () {
   // Update Players
   for (var id in this.gameState.players) {
+
     if (!this.players[id]) {
       // These are new player
       this.addPlayer(this.gameState.players[id]);
+
     } else {
       if (this.players[id].HP > this.gameState.players[id].HP) {
         this.players[id].animateHit(this.stage);
@@ -181,7 +183,7 @@ Game.prototype.updateWorld = function () {
         // Move Up
         this.updatePlayer(this.gameState.players[id], 0);
       } else {
-        this.updatePlayer(this.gameState.players[id]. lastRotation);
+        //this.updatePlayer(this.gameState.players[id]. lastRotation);
       }
     }
   }
@@ -216,7 +218,7 @@ Game.prototype.addPlayer = function (data) {
 }
 
 Game.prototype.updatePlayer = function (data, rotation) {
-  if (!data) return;
+  console.log('updatePlayer');
   var id = data.id;
   this.players[id].x = this.gameState.players[id].x;
   this.players[id].y = this.gameState.players[id].y;
@@ -302,8 +304,8 @@ Player.prototype.tick = function () {
 
 Player.prototype.animateHit = function (stage) {
   // Blood
-  var x = this.view.x + GameConfig.playerSize / 2;
-  var y = this.view.y + GameConfig.playerSize / 2;
+  var x = this.view.x;
+  var y = this.view.y;
 
   for (var i=0; i<100; i++) {
     var splat = new createjs.Shape();

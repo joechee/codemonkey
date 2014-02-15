@@ -259,8 +259,7 @@ Game.prototype.removeProjectile = function (projectile) {
 var Player = function(data) {
   this.data = data;
   this.id = data.id;
-  //this.name = data.name;
-  this.name = "Chunmun";
+  this.name = data.name;
 
   // Easeljs stuff
   this.view = new createjs.Bitmap('/images/monkey.png');

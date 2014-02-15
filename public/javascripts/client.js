@@ -140,7 +140,9 @@ Game.prototype.handleTick = function(ticker_data) {
     createjs.Tween.removeTweens(this.stage);
     createjs.Tween.get(this.stage, {override:true})
     .to({ regX : xy.x - leftOffset,
-          regY : xy.y - topOffset }, 200, createjs.Ease.linear);
+          regY : xy.y - topOffset,
+          scaleX: 2.0,
+          scaleY: 2.0}, 200, createjs.Ease.linear);
 
   } else {
 

@@ -150,7 +150,7 @@ h2, p {
 	border: 5px solid #ffcb2d;
 }
 
-.arena-textarea {
-	/*height: 600;*/
+.play .textarea-container {
+	margin-bottom: 20px;
 }
 

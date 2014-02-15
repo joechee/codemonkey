@@ -18,14 +18,28 @@ block content
                 div(class="col-md-4")
                     h2 Write Code
                     hr
-                    textarea(cols="40", rows="25", class="arena-textarea").
-                        me.moveForward(5);
-                        me.moveLeft(10);
+                    div(class="textarea-container")
+                        textarea(cols="40", rows="25", class="arena-textarea", id="textarea").
+                            alert('YOLO!');
+                    button(class="btn btn-warning", onclick="submitActions()") Submit
     script.
-        $(function() { var myCodeMirror = CodeMirror.fromTextArea(document.querySelector('.arena-textarea'), {
+        var cm = 'hello';
+        var hello = 'hello';
+        $(function() { 
+            ta = document.getElementById('textarea');
+            cm = CodeMirror.fromTextArea(ta, {
                 lineNumbers: true,
                 matchBrackets: true, 
                 mode: 'javascript',
                 theme: 'twilight',
-            }).setSize(null, 400);
+                lineWrapping: true
+            });
+
+            cm.setSize(null, 400);
         });
+
+        function submitActions() {
+            cm.save();
+            console.log(ta.value);
+            eval(ta.value);
+        }

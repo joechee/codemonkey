@@ -37,6 +37,9 @@ app.get('/', routes.index);
 app.get('/play', routes.play);
 app.get('/users', user.list);
 app.get('/testsocket', routes.testsocket);
+app.get('/models.js', function (res) {
+  res.sendfile(__dirname + '/models.js');
+});
 
 // Server setups
 var server = http.createServer(app);

@@ -9,12 +9,17 @@ block content
     script(type="text/javascript", src="/javascripts/repl.js")
     script(type="text/javascript", src="/javascripts/codemirror-repl.js")
     script(type="text/javascript", src="/javascripts/javascript.js")
+
+    script.
+        PLAYER_NAME = '#{name}';
+
     script(type="text/javascript", src="/javascripts/play.js")
     //- script(type="text/javascript", src="/javascripts/matchbrackets.js")
 
     script(type="text/javascript", src="/javascripts/socket.js")
     script(type="text/javascript", src="/javascripts/commands.js")
     script(type="text/javascript", src="models.js")
+
 
     script(type="text/javascript", src="/javascripts/client.js")
     div(class="full play")

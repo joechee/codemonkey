@@ -167,22 +167,7 @@ Game.prototype.updateWorld = function () {
       if (this.players[id].HP > this.gameState.players[id].HP) {
         this.players[id].animateHit(this.stage);
       }
-      var lastRotation = this.players[id].view.rotation;
-      if (this.gameState.players[id].x < this.players[id].x) {
-        // Move left
-        this.updatePlayer(this.gameState.players[id], -90);
-      } else if (this.gameState.players[id].x > this.players[id].x) {
-        // Move right
-        this.updatePlayer(this.gameState.players[id], 90);
-      } else if (this.gameState.players[id].y > this.players[id].y) {
-        // Move down
-        this.updatePlayer(this.gameState.players[id], 180);
-      } else if (this.gameState.players[id].y < this.players[id].y) {
-        // Move Up
-        this.updatePlayer(this.gameState.players[id], 0);
-      } else {
-        this.updatePlayer(this.gameState.players[id]. lastRotation);
-      }
+      this.updatePlayer(this.gameState.players[id], this.gameState.players[id].direction * -90);
     }
   }
   for (var id in this.players) {

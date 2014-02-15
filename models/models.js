@@ -19,7 +19,7 @@ try {
   var directions = [
     [0, -1],
     [1, 0],
-    [0, -1],
+    [0, 1],
     [-1, 0]
   ];
 
@@ -135,7 +135,20 @@ try {
     return obj;
   };
 
-  Player.prototype.move = function (x, y) {
+  Player.prototype.move = function(direction) {
+    if (this.gameState === undefined) {
+      throw new Error("Game State not defined!");
+    }
+
+    if (direction < 0 || direction > 3) {
+      throw new Error("Invalid direction");
+    }
+
+    var delta = directions[direction];
+    return this.moveTo(this.x+delta[0], this.y+delta[1]);
+  }
+
+  Player.prototype.moveTo = function (x, y) {
     if (this.gameState === undefined) {
       throw new Error("Game State not defined!");
     }
@@ -147,7 +160,6 @@ try {
     if (this.checkCollision()) {
       return false;
     }
-
     
     var changeX = this.x - oldX;
     var changeY = this.y - oldY;

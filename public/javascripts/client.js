@@ -1,5 +1,5 @@
 var Client = function () {
-  var arenaCanvas = document.getElementById('arenaCanvas');
+  var arenaCanvas = document.getElementById('arena-canvas');
 
   //arenaCanvas.width = window.innerWidth;
   //arenaCanvas.height = window.innerHeight;

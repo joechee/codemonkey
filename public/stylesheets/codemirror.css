@@ -36,6 +36,7 @@
   min-width: 20px;
   text-align: right;
   color: #999;
+  font-size: 18px;
 }
 
 /* CURSOR */
@@ -268,5 +269,9 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 
 .CodeMirror-code > div.run {
   background: #111111;
+}
+
+.CodeMirror-code > div.run.err {
+  background: red;
 }
 

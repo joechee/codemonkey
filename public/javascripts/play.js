@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded", function () {
-    var geval = eval;
+    var geval = safeEval;
 
     var repl = new CodeMirrorREPL("arena-textarea", {
         mode: "javascript",
@@ -84,6 +84,7 @@ window.addEventListener("DOMContentLoaded", function () {
         try {
             if (isExpression(code)) {
                 geval("__expression__ = " + code);
+                window.data = undefined;
                 express(__expression__);
             } else geval(code);
         } catch (error) {

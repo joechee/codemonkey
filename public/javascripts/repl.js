@@ -15,23 +15,18 @@
 		setRunningTimeout();
 		data.me = document.playerCommands;
 
-		try {
-			if (code === "") {
-				return;
-			} else {
-				code = checkCode(code);
-				if (code) {
-					window.data = data;
-					var safeCode = "with(data){" + code + "};";
-					eval(safeCode);
-				}
-			}	
-		} catch (e) {
-			console.error(e);
-			error = true;
-		} finally {
-			window.data = undefined;
-		}
+		if (code === "") {
+			return;
+		} else {
+			code = checkCode(code);
+			if (code) {
+				window.data = data;
+				var safeCode = "with(data){" + code + "};";
+				eval(safeCode);
+			}
+		}	
+
+		window.data = undefined;
 		return error;
 	}
 
@@ -118,6 +113,7 @@
 			throw new Error("Breaking out of function due to timeout");
 		}
 	}
+	/*
 
     var $repl = document.getElementById('arena-textarea');
     $(function() { 
@@ -188,6 +184,7 @@
     	}
     	return result;
     }
+    */
 
 	window.checkTimeout = checkTimeout;
 	window.safeEval = safeEval;

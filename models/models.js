@@ -19,8 +19,8 @@ try {
   var directions = [
     [0, -1],
     [1, 0],
-    [0, -1],
-    [-1, 0]
+    [-1, 0],
+    [0, 1]
   ];
 
   // Serialize directions so that indexOf can be used
@@ -102,9 +102,11 @@ try {
     }
     for (var i in obj2) {
       if (!obj[i] && type === "player") {
-        new Player(gameState, obj2[i].id);
+        var player = new Player(gameState, obj2[i].id);
+        player.unserialize(obj2[i]);
       } else if (!obj[i] && type === "projectile") {
-        new Projectile(gameState, obj2[i].id);
+        var projectile = new Projectile(gameState, obj2[i].id);
+        projectile.unserialize(obj2[i]);
       }
     } 
   }
@@ -133,9 +135,28 @@ try {
       }
     }
     return obj;
-  };
+  }
 
-  Player.prototype.move = function (x, y) {
+  Player.prototype.unserialize = function(data) {
+    for (var i in data) {
+      this[i] = data[i];
+    }
+  }
+
+  Player.prototype.move = function(direction) {
+    if (this.gameState === undefined) {
+      throw new Error("Game State not defined!");
+    }
+
+    if (direction < 0 || direction > 3) {
+      throw new Error("Invalid direction");
+    }
+
+    var delta = directions[direction];
+    return this.moveTo(this.x+delta[0], this.y+delta[1]);
+  }
+
+  Player.prototype.moveTo = function (x, y) {
     if (this.gameState === undefined) {
       throw new Error("Game State not defined!");
     }
@@ -147,7 +168,6 @@ try {
     if (this.checkCollision()) {
       return false;
     }
-
     
     var changeX = this.x - oldX;
     var changeY = this.y - oldY;
@@ -170,6 +190,13 @@ try {
           this.gameState.players[i].y === this.y)) {
         return true;
       }
+      if (this.gameState.players[i].x < 0 ||
+          this.gameState.players[i].y < 0 ||
+          this.gameState.players[i].x > MAP_SIZE[0] ||
+          this.gameState.players[i].y > MAP_SIZE[1]) {
+        // TODO: Fix bounds for player movement 
+        return "wall";
+      }
     }
     return false;
   };
@@ -182,6 +209,7 @@ try {
                                     direction,
                                     this);
   };
+
 
   function Projectile(gameState, x, y, direction, owner) {
     if (!gameState || !x || !y || !direction || !owner) {
@@ -234,6 +262,12 @@ try {
     }
     return obj;
   };
+
+  Projectile.prototype.unserialize = function(data) {
+    for (var i in data) {
+      this[i] = data[i];
+    }
+  }
   
   window.Player = Player;
   window.Projectile = Projectile;

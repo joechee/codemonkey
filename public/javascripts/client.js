@@ -15,26 +15,20 @@ var Client = function () {
   game.loadMap();
   game.updateWorld();
 
-  registerPlayer('hello', function(player) {
-    console.log(player);
+  registerPlayer('hello', function(socket, player) {
+    game.pid = player.id;
+    game.player = player;
     game.start();
+
+    document.playerCommands = new PlayerCommands(socket, player);
   });
 };
-
-Client.prototype.onReadyFunction = function(readyFunction) {
-  if (this.ready) {
-    readyFunction(this.game);
-  }
-  else {
-    this.readyFunction = readyFunction;
-  }
-}
 
 GameConfig = {
   tileSize: 20,
   padding: 2,
   playerSize: 18,
-  doChaseCam: false
+  doChaseCam: true
 };
 
 var xyToPix = function(pt) {
@@ -51,6 +45,9 @@ var Game = function (stage) {
   this.roundTime = 300;
   this.cooldownTime = 5;
   this.score = {};
+
+  this.pid = undefined;
+  this.player = undefined;
 
   this.gameState = new GameState();
 
@@ -124,15 +121,19 @@ Game.prototype.handleTick = function(ticker_data) {
   
   // Chase Cam - Currently hardcoded to chase Player id:1234
   if (GameConfig.doChaseCam) {
-    this.stage.scaleX = 1.0;
-    this.stage.scaleY = 1.0;
-    var chased = _.find(this.players, function(p){return p.id == 1234;});
+    var chased = this.players[this.pid];
     xy = xyToPix({x:chased.x, y:chased.y});
-    var leftOffset = this.stage.canvas.width / 2;
-    var topOffset = this.stage.canvas.height / 2;
+    var scaleX = 2.0;
+    var scaleY = 2.0;
+    var leftOffset = this.stage.canvas.width / 2 / scaleX;
+    var topOffset = this.stage.canvas.height / 2 / scaleY;
 
-    this.stage.regX = xy.x - leftOffset;
-    this.stage.regY = xy.y - topOffset;
+    createjs.Tween.removeTweens(this.stage);
+    createjs.Tween.get(this.stage, {override:true})
+    .to({ regX : xy.x - leftOffset,
+          regY : xy.y - topOffset,
+          scaleX: scaleX,
+          scaleY: scaleY}, 200, createjs.Ease.linear);
 
   } else {
 
@@ -262,7 +263,7 @@ var Projectile = function(data) {
   // Easeljs stuff
   this.view = new createjs.Shape();
   var leftPadding = Math.abs(GameConfig.tileSize - GameConfig.playerSize) / 2;
-  this.view.graphics.beginFill("#00ff00").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
+  this.view.graphics.beginFill("#0000ff").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
 
   var xy = xyToPix(data);
   this.view.x = xy.x;

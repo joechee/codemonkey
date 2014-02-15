@@ -6,8 +6,8 @@
     var DIRECTIONS = [
     [0,-1],
     [1,0],
-    [0,1],
-    [-1,0]
+    [-1,0],
+    [0,1]
     ];
 
     function PlayerCommands(socket, player) {
@@ -15,16 +15,16 @@
         this.player = player;
     }
 
-    function makeMove(id, direction) {
+    function makeMove(direction) {
         return function() {
-            socket.emit('playerMove', {playerId: id, x: DIRECTIONS[direction][0], y: DIRECTIONS[direction][1]});
+            socket.emit('playerMove', {playerId: this.player.id, direction: direction});
         }
     }
 
-    PlayerCommands.prototype.moveLeft = makeMove(this.player.id, LEFT);
-    PlayerCommands.prototype.moveRight = makeMove(this.player.id, RIGHT);
-    PlayerCommands.prototype.moveUp = makeMove(this.player.id, UP);
-    PlayerCommands.prototype.moveDown = makeMove(this.player.id, DOWN);
+    PlayerCommands.prototype.moveLeft = makeMove(LEFT);
+    PlayerCommands.prototype.moveRight = makeMove(RIGHT);
+    PlayerCommands.prototype.moveUp = makeMove(UP);
+    PlayerCommands.prototype.moveDown = makeMove(DOWN);
 
     window.PlayerCommands = PlayerCommands;
 })(window);

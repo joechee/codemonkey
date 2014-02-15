@@ -1,6 +1,7 @@
 module.exports = function(gameState, io) {
     var models = require('../models/models.js');
     io.sockets.on('connection', function (socket) {
+        console.log('connection');
         var player = new models.Player(gameState);
         socket.player = player;
         onRegisterPlayer(socket);
@@ -13,6 +14,7 @@ module.exports = function(gameState, io) {
 
     function onRegisterPlayer(socket) {
         socket.on('registerPlayer', function(data) {
+            console.log("here");
             var player = new models.Player(gameState);
             gameState.registerPlayer(player);
 

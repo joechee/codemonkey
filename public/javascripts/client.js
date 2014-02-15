@@ -6,6 +6,9 @@ var Client = function () {
   //arenaCanvas.width = window.innerWidth;
   //arenaCanvas.height = window.innerHeight;
 
+  this.readyFunction = undefined;
+  this.ready = false;
+
   var stage = new createjs.Stage(arenaCanvas);
 
   var game = new Game(stage);
@@ -14,6 +17,13 @@ var Client = function () {
   game.loadMap();
   game.updateWorld();
 
+  socket.emit('registerPlayer', {name: name});
+  registerPlayer('hello', function(player) {
+    console.log(player);
+    game.start();
+  });
+
+/*
   // ===== Add Player Test code here
   var p = {
     id: 1234,
@@ -24,12 +34,27 @@ var Client = function () {
     y: 5
   };
 
+  this.game = game;
+  if (this.readyFunction) {
+    this.readyFunction(this.game);
+  }
+
   game.addPlayer(p);
   // =====
 
   game.start();
   console.log("Loaded Game")
+  */
 };
+
+Client.prototype.onReadyFunction = function(readyFunction) {
+  if (this.ready) {
+    readyFunction(this.game);
+  }
+  else {
+    this.readyFunction = readyFunction;
+  }
+}
 
 GameConfig = {
   tileSize: 20,

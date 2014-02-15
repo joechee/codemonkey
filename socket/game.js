@@ -7,7 +7,7 @@ module.exports = function(gameState, io) {
     });
 
     function broadcastGameState(socket) {
-        socket.emit('gameState', gameState.serialize());
+        io.sockets.emit('gameState', gameState.serialize());
     }
 
     function onRegisterPlayer(socket) {

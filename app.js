@@ -9,7 +9,7 @@ var http = require('http');
 var path = require('path');
 var socket = require('socket.io');
 var models = require('./models/models.js');
-var socketfunc = require('./socket/main.js');
+var gamesocket = require('./socket/game.js');
 
 
 var app = express();
@@ -44,4 +44,4 @@ server.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
 var io = socket.listen(server);
-socketfunc(io);
+gamesocket(null, io);

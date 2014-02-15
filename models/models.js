@@ -86,9 +86,11 @@
 
 
   Player.prototype.shoot = function (direction) {
-    var projectile = new Projectile(x + directions[direction][0],
-                                    y + directions[direction][1]);
-    // TODO: Implement projectile
+    var projectile = new Projectile(this.gameState,
+                                    x + directions[direction][0],
+                                    y + directions[direction][1],
+                                    direction
+                                    this);
   };
 
   function Projectile(gameState, x, y, direction, owner) {
@@ -114,7 +116,6 @@
       playerCollision.HP--;
       gameState.deregisterProjectile(this);
     }
-     
   };
 
   Projectile.checkCollision = function () {

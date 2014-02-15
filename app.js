@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -10,6 +9,7 @@ var http = require('http');
 var path = require('path');
 var socket = require('socket.io');
 var models = require('./models/models.js');
+var socketfunc = require('./socket/main.js');
 
 
 var app = express();
@@ -44,11 +44,4 @@ server.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
 var io = socket.listen(server);
-
-// Socket stuff
-io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});
+socketfunc(io);

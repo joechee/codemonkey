@@ -43,7 +43,7 @@
       "0,-1",
       "1,0",
       "0,1",
-      "-1,0"]
+      "-1,0"
     ];
     
     this.direction = directions.indexOf([changeX, changeY].toString()); 

@@ -29,8 +29,10 @@ GameConfig = {
   tileSize: 20,
   padding: 2,
   playerSize: 18,
-  chaseZoom: 1.5,
-  doChaseCam: true
+  chaseZoom: 1.0,
+  doChaseCam: false,
+  rows: 27,
+  cols: 34
 };
 
 var xyToPix = function(pt) {
@@ -59,8 +61,8 @@ var Game = function (stage) {
   });
 
   // Map
-  this.rows = 30; // Math.floor(stage.canvas.height/(GameConfig.tileSize+GameConfig.padding)); 
-  this.cols = 40; // Math.floor(stage.canvas.width/(GameConfig.tileSize+GameConfig.padding));
+  this.rows = GameConfig.rows; //Math.floor(stage.canvas.height/(GameConfig.tileSize+GameConfig.padding)); 
+  this.cols = GameConfig.cols; //Math.floor(stage.canvas.width/(GameConfig.tileSize+GameConfig.padding));
   console.log('Game map started with ',this.rows, this.cols);
 
 
@@ -270,7 +272,8 @@ Player.prototype.animateHit = function (stage) {
   for (var i=0; i<100; i++) {
     var splat = new createjs.Shape();
     var splatSize = GameConfig.playerSize * 0.5 * Math.random();
-    splat.graphics.beginFill("#ff0000").drawRect(0, 0, splatSize, splatSize);
+    //splat.graphics.beginFill("#ff0000").drawRect(0, 0, splatSize, splatSize);
+    splat.graphics.beginFill("#ff0000").drawCircle(0,0,splatSize);
     splat.x = x;
     splat.y = y;
     var offsetX = 30 * (Math.random() * 2.0 - 1);

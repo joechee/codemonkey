@@ -131,7 +131,7 @@ h2, p, input {
 }
 
 .play {
-	background-image: url('../images/background-play.jpg');
+	background-image: url('../images/jungle.jpg');
 }
 
 .logo-small {
@@ -146,8 +146,8 @@ h2, p, input {
 }
 
 .arena-canvas {
-	background-color: black;
-	border: 5px solid #ffcb2d;
+	/*background-color: black;*/
+	border: 5px solid black;
 }
 
 .play .textarea-container {

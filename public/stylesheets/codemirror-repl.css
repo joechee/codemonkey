@@ -2,7 +2,7 @@
   height: 500px;
   line-height: 1em;
   font-family: monospace;
-
+  font-size: 16px;
   /* Necessary so the scrollbar can be absolutely positioned within the wrapper on Lion. */
   position: relative;
   /* This prevents unwanted scrollbars from showing up on the body and wrapper in IE. */
@@ -52,7 +52,7 @@
 .CodeMirror-gutter {
   position: absolute; left: 0; top: 0;
   z-index: 10;
-  background-color: #ffcb2d;
+  background-color: #fff;
   border-right: 1px solid #9e7702;
   min-width: 2em;
   height: 100%;

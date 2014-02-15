@@ -131,7 +131,7 @@ h2, p, input {
 }
 
 .play {
-	background-image: url('../images/background-play.jpg');
+	/*background-image: url('../images/background-landing.jpg');*/
 }
 
 .logo-small {
@@ -153,4 +153,19 @@ h2, p, input {
 .play .textarea-container {
 	margin-bottom: 20px;
 }
+
+.play-title {
+  color: black;
+}
+
+.message {
+    color: #000000 !important;
+    font-weight: normal !important;
+}
+
+.error {
+    color: #FF0000 !important;
+    font-weight: bold;
+}
+
 

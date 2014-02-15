@@ -119,7 +119,7 @@
 		}
 	}
 
-    var $repl = document.getElementById('textarea');
+    var $repl = document.getElementById('arena-textarea');
     $(function() { 
         cm = CodeMirror.fromTextArea($repl, {
             lineNumbers: true,

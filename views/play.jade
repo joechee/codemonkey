@@ -1,13 +1,16 @@
 extends layout
 
 block content
-    link(href="/stylesheets/codemirror.css", rel="stylesheet")
+    link(href="/stylesheets/codemirror-repl.css", rel="stylesheet")
     link(href="/stylesheets/twilight.css", rel="stylesheet")
+    //- link(href="/stylesheets/elegant.css", rel="stylesheet")
     script(type="text/javascript", src="/javascripts/underscore-min.js")
     script(type="text/javascript", src="/javascripts/createjs-min.js")
-    script(type="text/javascript", src="/javascripts/codemirror.js")
+    script(type="text/javascript", src="/javascripts/codemirror-repl.js")
     script(type="text/javascript", src="/javascripts/javascript.js")
-    script(type="text/javascript", src="/javascripts/matchbrackets.js")
+    script(type="text/javascript", src="/javascripts/play.js")
+    //- script(type="text/javascript", src="/javascripts/matchbrackets.js")
+
     script(type="text/javascript", src="/javascripts/socket.js")
     script(type="text/javascript", src="/javascripts/commands.js")
     script(type="text/javascript", src="models.js")
@@ -21,13 +24,11 @@ block content
                 div(class="col-md-8 arena-container")
                     canvas(id="arena-canvas", width="750", height="600", class="arena-canvas")
                 div(class="col-md-4")
-                    h2 Write Code
+                    h2(class="play-title") Write Code
                     hr
                     div(class="textarea-container")
-                        textarea(cols="40", rows="25", class="arena-textarea", id="textarea").
-                            alert('Hello #{name}!');
-                    button(class="btn btn-warning", onclick="submitActions()") Submit
+                        textarea(cols="40", rows="25", class="arena-textarea", id="arena-textarea", style="height: 500px")
 
-    script(type="text/javascript", src="/javascripts/repl.js")
+    //- script(type="text/javascript", src="/javascripts/repl.js")
     
 

@@ -49,6 +49,7 @@
         }
     }
 
+
     PlayerCommands.prototype.left = makeCmd('playerMove', LEFT);
     PlayerCommands.prototype.right = makeCmd('playerMove', RIGHT);
     PlayerCommands.prototype.up = makeCmd('playerMove', UP);
@@ -57,6 +58,9 @@
     PlayerCommands.prototype.shootRight = makeCmd('playerShoot', RIGHT);
     PlayerCommands.prototype.shootUp = makeCmd('playerShoot', UP);
     PlayerCommands.prototype.shootDown = makeCmd('playerShoot', DOWN);
+    PlayerCommands.prototype.stop = function() {
+        emptyQueue();
+    }
 
     window.PlayerCommands = PlayerCommands;
 })(window);

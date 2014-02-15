@@ -19,7 +19,7 @@ var Client = function () {
     game.pid = player.id;
     game.player = player;
     game.start();
-
+    console.log("Game Started");
     document.playerCommands = new PlayerCommands(socket, player);
   });
 };
@@ -28,6 +28,7 @@ GameConfig = {
   tileSize: 20,
   padding: 2,
   playerSize: 18,
+  chaseZoom: 1.5,
   doChaseCam: true
 };
 
@@ -123,8 +124,8 @@ Game.prototype.handleTick = function(ticker_data) {
   if (GameConfig.doChaseCam) {
     var chased = this.players[this.pid];
     xy = xyToPix({x:chased.x, y:chased.y});
-    var scaleX = 2.0;
-    var scaleY = 2.0;
+    var scaleX = GameConfig.chaseZoom;
+    var scaleY = GameConfig.chaseZoom;
     var leftOffset = this.stage.canvas.width / 2 / scaleX;
     var topOffset = this.stage.canvas.height / 2 / scaleY;
 

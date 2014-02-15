@@ -9,7 +9,6 @@ module.exports = function(gameState, io) {
     function onRegisterPlayer(socket) {
         socket.on('registerPlayer', function(data) {
             var player = new models.Player(gameState);
-            gameState.registerPlayer(player);
 
             socket.emit('gameReady', player.serialize());
             broadcastGameStateLoop();

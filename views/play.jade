@@ -19,13 +19,13 @@ block content
     script(type="text/javascript", src="/javascripts/client.js")
     div(class="full play")
         div(class="container play-container")
-            a(href="/")
-                img(src="/images/logo-small.png", class="logo-small")
             div(class="row")
                 div(class="col-md-8 arena-container")
                     canvas(id="arena-canvas", width="750", height="600", class="arena-canvas")
-                div(class="col-md-4")
-                    //- h2(class="play-title") Write Code
+                div(class="col-md-4 code-container")
+                    a(href="/")
+                        img(src="/images/logo-small.png", class="logo-small")
+                    h2(class="play-title")  #{name}
                     //- hr
                     div(class="textarea-container")
                         textarea(cols="40", rows="25", class="arena-textarea", id="arena-textarea", style="height: 500px")

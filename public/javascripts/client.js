@@ -225,6 +225,10 @@ Game.prototype.updatePlayer = function (data, rotation) {
 }
 
 Game.prototype.removePlayer = function (player) {
+  this.stage.removeChild(player.nameView);
+  delete this.players[player.id].nameView;
+  this.players[player.id].nameView = undefined;
+
   this.stage.removeChild(player.view);
   delete this.players[player.id].view;
   this.players[player.id].view = undefined;

@@ -36,7 +36,7 @@ GameConfig = {
   tileSize: 20,
   padding: 2,
   playerSize: 18,
-  doChaseCam: true
+  doChaseCam: false
 };
 
 var xyToPix = function(pt) {

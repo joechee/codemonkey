@@ -6,24 +6,23 @@ module.exports = function(gameState, io) {
         onRegisterPlayer(socket);
     });
 
+    function broadcastGameState(socket) {
+        socket.emit('gameState', gameState.serialize());
+    }
+
     function onRegisterPlayer(socket) {
         socket.on('registerPlayer', function(data) {
             socket.emit('gameReady', socket.player.serialize());
-            broadcastGameStateLoop();
+            broadcastGameState(socket);
         });
 
         socket.on('playerMove', function(data) {
             if (socket.player.id == data.playerId) {
                 gameState.players[data.playerId].move(data.direction);
+                broadcastGameState(socket);
             }
         });
 
-        function broadcastGameStateLoop() {
-            setTimeout(function broadcastGameState () {
-                socket.emit('gameState', gameState.serialize());
-                broadcastGameStateLoop();
-            }, 1000);
-        }
         socket.on('disconnect', function () {
           gameState.deregisterPlayer(socket.player);
         });

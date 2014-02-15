@@ -9,7 +9,7 @@ try {
 }
 (function (window) {
   
-  var MAP_SIZE = [10, 10];
+  var MAP_SIZE = [40, 30];
   
   var UP = 0;
   var RIGHT = 1;

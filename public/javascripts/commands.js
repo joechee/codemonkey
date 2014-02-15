@@ -21,10 +21,10 @@
         }
     }
 
-    PlayerCommands.prototype.moveLeft = makeMove(LEFT);
-    PlayerCommands.prototype.moveRight = makeMove(RIGHT);
-    PlayerCommands.prototype.moveUp = makeMove(UP);
-    PlayerCommands.prototype.moveDown = makeMove(DOWN);
+    PlayerCommands.prototype.left = makeMove(LEFT);
+    PlayerCommands.prototype.right = makeMove(RIGHT);
+    PlayerCommands.prototype.up = makeMove(UP);
+    PlayerCommands.prototype.down = makeMove(DOWN);
 
     window.PlayerCommands = PlayerCommands;
 })(window);

@@ -201,9 +201,11 @@ Game.prototype.updatePlayer = function (data) {
 }
 
 Game.prototype.removePlayer = function (player) {
+  this.stage.removeChild(player.view);
+  delete this.players[player.id].view;
+  this.players[player.id].view = undefined;
   this.players[player.id] = undefined;
   delete this.players[player.id];
-  this.stage.removeChild(player.view);
 }
 
 Game.prototype.addProjectile = function (data) {
@@ -219,10 +221,11 @@ Game.prototype.updateProjectile = function (data) {
 }
 
 Game.prototype.removeProjectile = function (projectile) {
-  console.log('sdfasdfahsldkfajflajshasf');
+  this.stage.removeChild(projectile.view);
+  delete this.projectiles[projectile.id].view;
+  this.projectiles[projectile.id].view = undefined;
   this.projectiles[projectile.id] = undefined;
   delete this.projectiles[projectile.id];
-  this.stage.removeChild(projectile.view);
 }
 
 // ----------

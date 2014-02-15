@@ -1,11 +1,14 @@
 extends layout
 
 block content
+    script(type="text/javascript" src="javascripts/underscore-min.js")
+    script(type="text/javascript" src="javascripts/createjs-min.js")
+    script(type="text/javascript" src="javascripts/client.js")
     div(class="container")
         h1 Code Monkey
         div(class="row")
             div(class="col-md-8 arena-container")
-                canvas(width="750", height="600", class="arena-canvas")
+                canvas(id="arenaCanvas", width="750", height="600", class="arena-canvas")
             div(class="col-md-4")
                 h2 Write Code
                 hr

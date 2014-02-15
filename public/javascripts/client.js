@@ -39,6 +39,13 @@ var xyToPix = function(pt) {
   return {x:pt.x*(GameConfig.tileSize+GameConfig.padding),y:pt.y*(GameConfig.tileSize+GameConfig.padding)}
 }
 
+var xyToCenterPix = function(pt) {
+  return {
+    x:pt.x*(GameConfig.tileSize+GameConfig.padding)+GameConfig.tileSize/2,
+    y:pt.y*(GameConfig.tileSize+GameConfig.padding)+GameConfig.tileSize/2
+  }
+}
+
 var Game = function (stage) {
   this.players = {};
   this.projectiles = {};
@@ -158,10 +165,24 @@ Game.prototype.updateWorld = function () {
       this.addPlayer(this.gameState.players[id]);
     } else {
       if (this.players[id].HP > this.gameState.players[id].HP) {
-        console.log('animating hit');
         this.players[id].animateHit(this.stage);
       }
-      this.updatePlayer(this.gameState.players[id]);
+      var lastRotation = this.players[id].view.rotation;
+      if (this.gameState.players[id].x < this.players[id].x) {
+        // Move left
+        this.updatePlayer(this.gameState.players[id], -90);
+      } else if (this.gameState.players[id].x > this.players[id].x) {
+        // Move right
+        this.updatePlayer(this.gameState.players[id], 90);
+      } else if (this.gameState.players[id].y > this.players[id].y) {
+        // Move down
+        this.updatePlayer(this.gameState.players[id], 180);
+      } else if (this.gameState.players[id].y < this.players[id].y) {
+        // Move Up
+        this.updatePlayer(this.gameState.players[id], 0);
+      } else {
+        this.updatePlayer(this.gameState.players[id]. lastRotation);
+      }
     }
   }
   for (var id in this.players) {
@@ -175,7 +196,6 @@ Game.prototype.updateWorld = function () {
     if (!this.projectiles[id]) {
       // These are new projectiles
       this.addProjectile(this.gameState.projectiles[id]);
-      console.log('adding projectile')
     } else {
       this.updateProjectile(this.gameState.projectiles[id]);
     }
@@ -192,13 +212,16 @@ Game.prototype.addPlayer = function (data) {
   var newPlayer = new Player(data);
   this.players[newPlayer.id] = newPlayer;
   this.stage.addChild(newPlayer.view);
+  this.stage.addChild(newPlayer.nameView);
 }
 
-Game.prototype.updatePlayer = function (data) {
+Game.prototype.updatePlayer = function (data, rotation) {
+  if (!data) return;
   var id = data.id;
   this.players[id].x = this.gameState.players[id].x;
   this.players[id].y = this.gameState.players[id].y;
   this.players[id].HP = this.gameState.players[id].HP;
+  this.players[id].view.rotation = rotation;
 }
 
 Game.prototype.removePlayer = function (player) {
@@ -236,7 +259,8 @@ Game.prototype.removeProjectile = function (projectile) {
 var Player = function(data) {
   this.data = data;
   this.id = data.id;
-  this.name = data.name;
+  //this.name = data.name;
+  this.name = "Chunmun";
 
   // Easeljs stuff
   this.view = new createjs.Bitmap('/images/monkey.png');
@@ -245,10 +269,10 @@ var Player = function(data) {
   this.view.scaleX = scale * 1.5;
   this.view.scaleY = scale * 1.5;
 
-  this.view.regY = scale * 100;
-  this.view.regX = scale * 100;
+  this.view.regY = 100 / 2;
+  this.view.regX = 100 / 2;
 
-  var xy = xyToPix(data);
+  var xy = xyToCenterPix(data);
   this.view.x = xy.x;
   this.view.y = xy.y
 
@@ -256,13 +280,21 @@ var Player = function(data) {
   this.y = data.y;
   this.HP = data.HP;
 
+  this.nameView = new createjs.Text(this.name, "12px 'peachy-keen'", "");
+  this.nameView.textAlign = 'center';
+  this.nameView.x = xy.x;
+  this.nameView.y = xy.y + GameConfig.tileSize/2;
+
   this.view.alpha = 1;
 }
 
 Player.prototype.tick = function () {
-  var xy = xyToPix({x:this.x, y:this.y});
+  var xy = xyToCenterPix({x:this.x, y:this.y});
   this.view.x = xy.x;
   this.view.y = xy.y
+
+  this.nameView.x = xy.x;
+  this.nameView.y = xy.y + GameConfig.tileSize/2;
 }
 
 Player.prototype.animateHit = function (stage) {

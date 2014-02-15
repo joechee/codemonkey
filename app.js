@@ -32,8 +32,11 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+console.log(routes);
+
 app.get('/', routes.index);
 app.get('/users', user.list);
+app.get('/testsocket', routes.testsocket);
 
 // Server setups
 var server = http.createServer(app);
@@ -42,10 +45,7 @@ server.listen(app.get('port'), function() {
 });
 var io = socket.listen(server);
 
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
-});
-
+// Socket stuff
 io.sockets.on('connection', function (socket) {
   socket.emit('news', { hello: 'world' });
   socket.on('my other event', function (data) {

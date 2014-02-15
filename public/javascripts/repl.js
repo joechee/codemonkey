@@ -14,7 +14,9 @@
 						safeEval: undefined,
 						setInterval: undefined,
 						setTimeout: undefined,
-						Function: undefined
+						Function: undefined,
+						me: document.playerCommands,
+						document: undefined
 					};
 					var safeCode = "with(data){" + code + "};";
 					eval(safeCode);

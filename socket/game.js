@@ -1,5 +1,7 @@
 module.exports = function(gameState, io) {
     var models = require('../models/models.js');
+    var zlib = require('zlib');
+
     io.sockets.on('connection', function (socket) {
         var player = new models.Player(gameState);
         socket.player = player;
@@ -19,7 +21,9 @@ module.exports = function(gameState, io) {
     }
 
     function broadcastGameState() {
-        io.sockets.emit('gameState', gameState.serialize());
+        zlib.gzip(gameState.serialize(), function(err, buffer) {
+            io.sockets.emit('gameState', buffer.toString('base64'));
+        });
     }
 
     gameState.broadcastGameState = broadcastGameState;

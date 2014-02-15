@@ -15,7 +15,7 @@ var Client = function () {
   game.loadMap();
   game.updateWorld();
 
-  registerPlayer('hello', function(socket, player) {
+  registerPlayer(PLAYER_NAME, function(socket, player) {
     console.log(player);
     game.pid = player.id;
     game.player = player;
@@ -26,17 +26,24 @@ var Client = function () {
 };
 
 GameConfig = {
-  tileSize: 20,
+  tileSize: 25,
   padding: 1,
   playerSize: 18,
   chaseZoom: 1.0,
   doChaseCam: false,
-  rows: 27,
-  cols: 34
+  rows: 23,
+  cols: 29
 };
 
 var xyToPix = function(pt) {
   return {x:pt.x*(GameConfig.tileSize+GameConfig.padding),y:pt.y*(GameConfig.tileSize+GameConfig.padding)}
+}
+
+var xyToCenterPix = function(pt) {
+  return {
+    x:pt.x*(GameConfig.tileSize+GameConfig.padding)+GameConfig.tileSize/2,
+    y:pt.y*(GameConfig.tileSize+GameConfig.padding)+GameConfig.tileSize/2
+  }
 }
 
 var Game = function (stage) {
@@ -158,10 +165,24 @@ Game.prototype.updateWorld = function () {
       this.addPlayer(this.gameState.players[id]);
     } else {
       if (this.players[id].HP > this.gameState.players[id].HP) {
-        console.log('animating hit');
         this.players[id].animateHit(this.stage);
       }
-      this.updatePlayer(this.gameState.players[id]);
+      var lastRotation = this.players[id].view.rotation;
+      if (this.gameState.players[id].x < this.players[id].x) {
+        // Move left
+        this.updatePlayer(this.gameState.players[id], -90);
+      } else if (this.gameState.players[id].x > this.players[id].x) {
+        // Move right
+        this.updatePlayer(this.gameState.players[id], 90);
+      } else if (this.gameState.players[id].y > this.players[id].y) {
+        // Move down
+        this.updatePlayer(this.gameState.players[id], 180);
+      } else if (this.gameState.players[id].y < this.players[id].y) {
+        // Move Up
+        this.updatePlayer(this.gameState.players[id], 0);
+      } else {
+        this.updatePlayer(this.gameState.players[id]. lastRotation);
+      }
     }
   }
   for (var id in this.players) {
@@ -191,19 +212,24 @@ Game.prototype.addPlayer = function (data) {
   var newPlayer = new Player(data);
   this.players[newPlayer.id] = newPlayer;
   this.stage.addChild(newPlayer.view);
+  this.stage.addChild(newPlayer.nameView);
 }
 
-Game.prototype.updatePlayer = function (data) {
+Game.prototype.updatePlayer = function (data, rotation) {
+  if (!data) return;
   var id = data.id;
   this.players[id].x = this.gameState.players[id].x;
   this.players[id].y = this.gameState.players[id].y;
   this.players[id].HP = this.gameState.players[id].HP;
+  this.players[id].view.rotation = rotation;
 }
 
 Game.prototype.removePlayer = function (player) {
+  this.stage.removeChild(player.view);
+  delete this.players[player.id].view;
+  this.players[player.id].view = undefined;
   this.players[player.id] = undefined;
   delete this.players[player.id];
-  this.stage.removeChild(player.view);
 }
 
 Game.prototype.addProjectile = function (data) {
@@ -219,9 +245,11 @@ Game.prototype.updateProjectile = function (data) {
 }
 
 Game.prototype.removeProjectile = function (projectile) {
+  this.stage.removeChild(projectile.view);
+  delete this.projectiles[projectile.id].view;
+  this.projectiles[projectile.id].view = undefined;
   this.projectiles[projectile.id] = undefined;
   delete this.projectiles[projectile.id];
-  this.stage.removeChild(projectile.view);
 }
 
 // ----------
@@ -235,12 +263,15 @@ var Player = function(data) {
 
   // Easeljs stuff
   this.view = new createjs.Bitmap('/images/monkey.png');
-  var leftPadding = Math.abs(GameConfig.tileSize - GameConfig.playerSize) / 2;
-  this.view.scaleX = 0.5;
-  this.view.scaleY = 0.5;
-  // this.view.graphics.beginFill("#00ff00").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
+  var scale = GameConfig.tileSize / 100;
 
-  var xy = xyToPix(data);
+  this.view.scaleX = scale * 1.5;
+  this.view.scaleY = scale * 1.5;
+
+  this.view.regY = 100 / 2;
+  this.view.regX = 100 / 2;
+
+  var xy = xyToCenterPix(data);
   this.view.x = xy.x;
   this.view.y = xy.y
 
@@ -248,24 +279,24 @@ var Player = function(data) {
   this.y = data.y;
   this.HP = data.HP;
 
+  this.nameView = new createjs.Text(this.name, "12px 'peachy-keen'", "");
+  this.nameView.textAlign = 'center';
+  this.nameView.x = xy.x;
+  this.nameView.y = xy.y + GameConfig.tileSize/2;
+
   this.view.alpha = 1;
 }
 
 Player.prototype.tick = function () {
-  var xy = xyToPix({x:this.x, y:this.y});
+  var xy = xyToCenterPix({x:this.x, y:this.y});
   this.view.x = xy.x;
   this.view.y = xy.y
+
+  this.nameView.x = xy.x;
+  this.nameView.y = xy.y + GameConfig.tileSize/2;
 }
 
 Player.prototype.animateHit = function (stage) {
-  // Player
-  var leftPadding = Math.abs(GameConfig.tileSize - GameConfig.playerSize) / 2;
-  this.view.graphics.clear().beginFill("#ff0000").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
-  var that = this;
-  setTimeout(function() {
-    that.view.graphics.clear().beginFill("#00ff00").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
-  },400);
-
   // Blood
   var x = this.view.x + GameConfig.playerSize / 2;
   var y = this.view.y + GameConfig.playerSize / 2;
@@ -298,15 +329,18 @@ Player.prototype.die = function () {
 var Projectile = function(data) {
   this.data = data;
   this.id = data.id;
-  this.name = data.name;
 
   // Easeljs stuff
   // this.view = new createjs.Shape();
   this.view = new createjs.Bitmap('/images/banana.png');
-  this.view.scaleX = 0.1;
-  this.view.scaleY = 0.1;
-  var leftPadding = Math.abs(GameConfig.tileSize - GameConfig.playerSize) / 2;
-  // this.view.graphics.beginFill("#0000ff").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
+  var scaleX = GameConfig.tileSize / 300;
+  var scaleY = GameConfig.tileSize / 218;
+
+  this.view.scaleX = scaleX;
+  this.view.scaleY = scaleY;
+
+  this.view.regX = scaleX * 300;
+  this.view.regY = scaleY * 218;
 
   var xy = xyToPix(data);
   this.view.x = xy.x;
@@ -322,12 +356,8 @@ Projectile.prototype.tick = function () {
   var xy = xyToPix({x:this.x, y:this.y});
   this.view.x = xy.x;
   this.view.y = xy.y;
-  // console.log(this.view);
-  this.view.regX = this.view.image.width/2;
-  // console.log(this.view.image.width/2 )
-  this.view.regY = this.view.image.height/2;
-  this.view.rotation += 5;
-  // console.log(this.angle);
+
+  //this.view.rotation += 5;
 }
 
 Projectile.prototype.die = function () {

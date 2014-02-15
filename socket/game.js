@@ -31,22 +31,44 @@ module.exports = function(gameState, io) {
             broadcastGameState();
         });
 
-        socket.on('playerMove', function(data) {
+        socket.on('left', function(data) {
             if (socket.player.id == data.playerId) {
                 if (floodCheck()) {
-                    gameState.players[data.playerId].move(data.direction);
+                    var player = gameState.players[data.playerId];
+                    player.rotateLeft();
                     broadcastGameState();
                 }
             }
         });
 
-        socket.on('playerShoot', function(data) {
+        socket.on('right', function(data) {
             if (socket.player.id == data.playerId) {
                 if (floodCheck()) {
-                  var projectile = gameState.players[data.playerId].shoot(data.direction);
-                  if (Object.keys(gameState.projectiles).length == 1) {
-                    gameState.updateProjectiles(broadcastGameState);
-                  }
+                    var player = gameState.players[data.playerId];
+                    player.rotateRight();
+                    broadcastGameState();
+                }
+            }
+        });
+
+        socket.on('shoot', function(data) {
+            if (socket.player.id == data.playerId) {
+                if (floodCheck()) {
+                    var player = gameState.players[data.playerId];
+                    player.shoot(player.direction);
+                    if (Object.keys(gameState.projectiles).length == 1) {
+                        gameState.updateProjectiles(broadcastGameState);
+                    }
+                }
+            }
+        });
+
+        socket.on('move', function(data) {
+            if (socket.player.id == data.playerId) {
+                if (floodCheck()) {
+                    var player = gameState.players[data.playerId];
+                    player.move(player.direction);
+                    broadcastGameState();
                 }
             }
         });

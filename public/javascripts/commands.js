@@ -1,15 +1,4 @@
 (function(window) {
-    var UP = 0;
-    var RIGHT = 1;
-    var LEFT = 2;
-    var DOWN = 3;
-    var DIRECTIONS = [
-    [0,-1],
-    [1,0],
-    [-1,0],
-    [0,1]
-    ];
-
     var queue = [];
     var queueEmpty = true;
     function send(key, command) {
@@ -43,21 +32,22 @@
         this.player = player;
     }
 
-    function makeCmd(cmd, direction) {
-        return function() {
-            send(cmd, {playerId: this.player.id, direction: direction})
-        }
+    PlayerCommands.prototype.left = function() {
+        send('left', {playerId: this.player.id});
     }
 
+    PlayerCommands.prototype.right = function() {
+        send('right', {playerId: this.player.id});
+    }
 
-    PlayerCommands.prototype.left = makeCmd('playerMove', LEFT);
-    PlayerCommands.prototype.right = makeCmd('playerMove', RIGHT);
-    PlayerCommands.prototype.up = makeCmd('playerMove', UP);
-    PlayerCommands.prototype.down = makeCmd('playerMove', DOWN);
-    PlayerCommands.prototype.shootLeft = makeCmd('playerShoot', LEFT);
-    PlayerCommands.prototype.shootRight = makeCmd('playerShoot', RIGHT);
-    PlayerCommands.prototype.shootUp = makeCmd('playerShoot', UP);
-    PlayerCommands.prototype.shootDown = makeCmd('playerShoot', DOWN);
+    PlayerCommands.prototype.move = function() {
+        send('move', {playerId: this.player.id});
+    }
+
+    PlayerCommands.prototype.shoot = function() {
+        send('shoot', {playerId: this.player.id});
+    }
+
     PlayerCommands.prototype.stop = function() {
         emptyQueue();
     }

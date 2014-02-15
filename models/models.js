@@ -12,15 +12,15 @@ try {
   var MAP_SIZE = [29, 23];
   
   var UP = 0;
-  var RIGHT = 1;
-  var LEFT = 2;
-  var DOWN = 3;
+  var LEFT = 1;
+  var DOWN = 2;
+  var RIGHT = 3;
 
   var directions = [
     [0, -1],
-    [1, 0],
     [-1, 0],
-    [0, 1]
+    [0, 1],
+    [1, 0]
   ];
 
   // Serialize directions so that indexOf can be used
@@ -133,7 +133,7 @@ try {
       this.x = Math.floor(Math.random() * MAP_SIZE[0]);
       this.y = Math.floor(Math.random() * MAP_SIZE[1]);
     } while (this.checkCollision());
-    this.direction = Math.floor(Math.random() * 4);
+    this.direction = 0;
     this.HP = 3;
     this.type = "player";
   }
@@ -154,6 +154,18 @@ try {
   Player.prototype.unserialize = function(data) {
     for (var i in data) {
       this[i] = data[i];
+    }
+  }
+
+  Player.prototype.rotateLeft = function() {
+    this.direction = (this.direction + 1) % 4
+  }
+
+  Player.prototype.rotateRight = function() {
+    if (this.direction -1 < 0) {
+      this.direction = 3;
+    } else {
+      this.direction = (this.direction - 1) % 4;
     }
   }
 

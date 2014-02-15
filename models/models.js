@@ -56,7 +56,7 @@ try {
   };
 
   GameState.prototype.registerProjectile = function (projectile) {
-    this.projectiles.push = projectile;
+    this.projectiles[projectile.id] = projectile;
   };
 
   GameState.prototype.deregisterProjectile = function (projectile) {
@@ -87,6 +87,20 @@ try {
     merge(self.projectiles, obj.projectiles, this, "projectile");
   };
 
+  GameState.prototype.updateProjectiles = function (callback) {
+    for (var id in this.projectiles) {
+      this.projectiles[id].updateState();
+    }
+    if (callback) callback();
+
+    var that = this;
+    if (Object.keys(this.projectiles).length > 0) {
+      setTimeout(function() {
+        that.updateProjectiles(callback);
+      }.bind(that), 200);
+    }
+  }
+
   // merges obj2 into obj
   // Merging function is as follows:
   // If key exists in obj but not in obj2, then remove key from obj
@@ -105,7 +119,7 @@ try {
         var player = new Player(gameState, obj2[i].id);
         player.unserialize(obj2[i]);
       } else if (!obj[i] && type === "projectile") {
-        var projectile = new Projectile(gameState, obj2[i].id);
+        var projectile = new Projectile(gameState, obj2[i].x, obj2[i].y, obj2[i].direction, obj2[i]);
         projectile.unserialize(obj2[i]);
       }
     } 
@@ -192,7 +206,6 @@ try {
             y < 0 ||
             x > MAP_SIZE[0] ||
             y > MAP_SIZE[1]) {
-          // TODO: Fix bounds for player movement 
           return "wall";
         }
       }
@@ -203,47 +216,57 @@ try {
 
   Player.prototype.shoot = function (direction) {
     var projectile = new Projectile(this.gameState,
-                                    x + directions[direction][0],
-                                    y + directions[direction][1],
+                                    this.x,
+                                    this.y,
                                     direction,
                                     this);
+    return projectile;
   };
 
 
   function Projectile(gameState, x, y, direction, owner) {
-    if (!gameState || !x || !y || !direction || !owner) {
+    if (!gameState || x==undefined || y==undefined || direction==undefined || !owner) {
+
       throw new Error("Undefined argments passed into Projectile constructor!");
     }
     this.x = x;
     this.y = y;
+    this.gameState = gameState;
     this.direction = direction;
     this.owner = owner;
     this.id = idgen.generate(); // Not too sure if this is necessary
     gameState.registerProjectile(this);
   }
 
-  Projectile.updateState = function () {
-    var oldX = this.x;
-    var oldY = this.y;
-    this.x = oldX + directions[this.direction][0];
-    this.y = oldY + directions[this.direction][1];
+  Projectile.prototype.updateState = function () {
+    this.x += directions[this.direction][0];
+    this.y += directions[this.direction][1];
 
-    var playerCollision = this.checkCollision();
-    if (playerCollision !== "wall") {
-      playerCollision.HP--;
-      gameState.deregisterProjectile(this);
+    var playerCollision = this.checkCollision(this.x, this.y);
+
+    if (playerCollision) {
+      this.gameState.deregisterProjectile(this);
+      if (playerCollision !== "wall") {
+        playerCollision.HP--;
+      }
+      return;
     }
-  };
+};
 
   Projectile.prototype.checkCollision = function (x, y) {
-    for (var i = 0; i < this.gameState.players.length; i++) {
-      if (this.gameState.players[i].x === x || 
-          this.gameState.players[i].y === y) {
-        return this.gameState.players[i];
-      }
-      if (this.gameState.players[i].x > MAP_SIZE[0] ||
-          this.gameState.players[i].y > MAP_SIZE[1]) {
-        return "wall";
+    for (var key in this.gameState.players) {
+      if (this.gameState.players.hasOwnProperty(key)) {
+        var player = this.gameState.players[key];
+        if (player.x === x && 
+            player.y === y) {
+          return player;
+        }
+        if (x < 0 ||
+            y < 0 ||
+            x > MAP_SIZE[0] ||
+            y > MAP_SIZE[1]) {
+          return "wall";
+        }
       }
     }
     return false;

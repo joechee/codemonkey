@@ -43,16 +43,20 @@
         this.player = player;
     }
 
-    function makeMove(direction) {
+    function makeCmd(cmd, direction) {
         return function() {
-            send('playerMove', {playerId: this.player.id, direction: direction})
+            send(cmd, {playerId: this.player.id, direction: direction})
         }
     }
 
-    PlayerCommands.prototype.left = makeMove(LEFT);
-    PlayerCommands.prototype.right = makeMove(RIGHT);
-    PlayerCommands.prototype.up = makeMove(UP);
-    PlayerCommands.prototype.down = makeMove(DOWN);
+    PlayerCommands.prototype.left = makeCmd('playerMove', LEFT);
+    PlayerCommands.prototype.right = makeCmd('playerMove', RIGHT);
+    PlayerCommands.prototype.up = makeCmd('playerMove', UP);
+    PlayerCommands.prototype.down = makeCmd('playerMove', DOWN);
+    PlayerCommands.prototype.shootLeft = makeCmd('playerShoot', LEFT);
+    PlayerCommands.prototype.shootRight = makeCmd('playerShoot', RIGHT);
+    PlayerCommands.prototype.shootUp = makeCmd('playerShoot', UP);
+    PlayerCommands.prototype.shootDown = makeCmd('playerShoot', DOWN);
 
     window.PlayerCommands = PlayerCommands;
 })(window);

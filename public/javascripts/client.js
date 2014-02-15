@@ -30,7 +30,7 @@ GameConfig = {
   padding: 2,
   playerSize: 18,
   chaseZoom: 1.5,
-  doChaseCam: false
+  doChaseCam: true
 };
 
 var xyToPix = function(pt) {
@@ -155,6 +155,10 @@ Game.prototype.updateWorld = function () {
       // These are new player
       this.addPlayer(this.gameState.players[id]);
     } else {
+      if (this.players[id].HP > this.gameState.players[id].HP) {
+        console.log('animating hit');
+        this.players[id].animateHit(this.stage);
+      }
       this.updatePlayer(this.gameState.players[id]);
     }
   }
@@ -164,11 +168,10 @@ Game.prototype.updateWorld = function () {
       this.removePlayer(this.players[id]);
     }
   }
-
   // Update Projectile
   for (var id in this.gameState.projectiles) {
     if (!this.projectiles[id]) {
-      // These are new player
+      // These are new projectiles
       this.addProjectile(this.gameState.projectiles[id]);
     } else {
       this.updateProjectile(this.gameState.projectiles[id]);
@@ -184,7 +187,6 @@ Game.prototype.updateWorld = function () {
 
 Game.prototype.addPlayer = function (data) {
   var newPlayer = new Player(data);
-  a = newPlayer;
   this.players[newPlayer.id] = newPlayer;
   this.stage.addChild(newPlayer.view);
 }
@@ -193,6 +195,7 @@ Game.prototype.updatePlayer = function (data) {
   var id = data.id;
   this.players[id].x = this.gameState.players[id].x;
   this.players[id].y = this.gameState.players[id].y;
+  this.players[id].HP = this.gameState.players[id].HP;
 }
 
 Game.prototype.removePlayer = function (player) {
@@ -214,6 +217,7 @@ Game.prototype.updateProjectile = function (data) {
 }
 
 Game.prototype.removeProjectile = function (projectile) {
+  console.log('sdfasdfahsldkfajflajshasf');
   this.projectiles[projectile.id] = undefined;
   delete this.projectiles[projectile.id];
   this.stage.removeChild(projectile.view);
@@ -239,6 +243,7 @@ var Player = function(data) {
 
   this.x = data.x;
   this.y = data.y;
+  this.HP = data.HP;
 
   this.view.alpha = 1;
 }
@@ -249,10 +254,19 @@ Player.prototype.tick = function () {
   this.view.y = xy.y
 }
 
-Player.prototype.animateHit = function (stage, direction) {
+Player.prototype.animateHit = function (stage) {
+  // Player
+  var leftPadding = Math.abs(GameConfig.tileSize - GameConfig.playerSize) / 2;
+  this.view.graphics.clear().beginFill("#ff0000").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
+  var that = this;
+  setTimeout(function() {
+    that.view.graphics.clear().beginFill("#00ff00").drawRect(leftPadding, leftPadding, GameConfig.playerSize, GameConfig.playerSize);
+  },400);
+
+  // Blood
   var x = this.view.x + GameConfig.playerSize / 2;
   var y = this.view.y + GameConfig.playerSize / 2;
-  
+
   for (var i=0; i<100; i++) {
     var splat = new createjs.Shape();
     var splatSize = GameConfig.playerSize * 0.5 * Math.random();

@@ -37,8 +37,8 @@ app.get('/', routes.index);
 app.get('/play', routes.play);
 app.get('/users', user.list);
 app.get('/testsocket', routes.testsocket);
-app.get('/models.js', function (res) {
-  res.sendfile(__dirname + '/models.js');
+app.get('/models.js', function (req,res) {
+  res.sendfile(__dirname + '/models/models.js');
 });
 
 // Server setups
@@ -47,4 +47,5 @@ server.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
 var io = socket.listen(server);
-gamesocket(null, io);
+var gameState = new models.GameState();
+gamesocket(gameState, io);

@@ -204,8 +204,8 @@ try {
         }
         if (x < 0 ||
             y < 0 ||
-            x > MAP_SIZE[0] ||
-            y > MAP_SIZE[1]) {
+            x > MAP_SIZE[0]-1 ||
+            y > MAP_SIZE[1]-1) {
           return "wall";
         }
       }
@@ -263,8 +263,8 @@ try {
         }
         if (x < 0 ||
             y < 0 ||
-            x > MAP_SIZE[0] ||
-            y > MAP_SIZE[1]) {
+            x > MAP_SIZE[0]-1 ||
+            y > MAP_SIZE[1]-1) {
           return "wall";
         }
       }

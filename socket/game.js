@@ -21,7 +21,13 @@ module.exports = function(gameState, io) {
     }
 
     function broadcastGameState() {
-        zlib.gzip(gameState.serialize(), function(err, buffer) {
+        var state = gameState.serialize();
+        var buffer = new Buffer(state, 'utf-8');
+
+        zlib.gzip(buffer, function(err, buffer) {
+            if (err) {
+                console.log(err);
+            }
             io.sockets.emit('gameState', buffer.toString('base64'));
         });
     }

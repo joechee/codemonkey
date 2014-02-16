@@ -93,7 +93,7 @@ Game.prototype.loadMap = function () {
         //tile.alpha = computedAlpha;
         tile.scaleX = GameConfig.tileSize / 160;
         tile.scaleY = GameConfig.tileSize / 160;
-
+        tile.alpha = 0.8;
       } else {
         var tile = new createjs.Shape();
         tile.graphics.beginFill("rgba(131, 203, 65, 0.8)").drawRect(0, 0, GameConfig.tileSize, GameConfig.tileSize);

@@ -326,7 +326,7 @@ Player.prototype.animateHit = function (stage) {
     var splat = new createjs.Shape();
     var splatSize = GameConfig.playerSize * 0.5 * Math.random();
     //splat.graphics.beginFill("#ff0000").drawRect(0, 0, splatSize, splatSize);
-    splat.graphics.beginFill("#ff0000").drawCircle(0,0,splatSize);
+    splat.graphics.beginFill("#cccccc").drawCircle(0,0,splatSize);
     splat.x = x;
     splat.y = y;
     var offsetX = 30 * (Math.random() * 2.0 - 1);

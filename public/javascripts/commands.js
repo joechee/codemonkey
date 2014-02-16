@@ -45,7 +45,8 @@
 
     function makeCmd(cmd, direction) {
         var fn = function() {
-            send(cmd, {playerId: this.player.id, direction: direction})
+            send(cmd, {playerId: this.player.id, direction: direction});
+            return this;
         };
         fn.toString = function () {
             return "[Function function]";
@@ -65,7 +66,11 @@
     PlayerCommands.prototype.shootDown = makeCmd('playerShoot', DOWN);
     PlayerCommands.prototype.stop = function() {
         emptyQueue();
-    }
+        return this;
+    };
+    PlayerCommands.prototype.stop.toString = function () {
+        return "[Function function]";
+    };
 
     window.PlayerCommands = PlayerCommands;
 })(window);

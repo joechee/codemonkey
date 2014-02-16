@@ -32,9 +32,18 @@ module.exports = function(gameState, io) {
             return;
         }
 */
+    var throttle = new Date();
+
     function broadcastGameState() {
         var state = gameState.serialize();
         var buffer = JSON.stringify(state);
+
+        /*
+        if (new Date() - throttle > 33.3 || force) {// Essentially to create at least 30 fps
+            io.sockets.emit('gameState', gameState.serialize());
+
+        }
+        */
 
         zlib.gzip(buffer, function(err, buffer) {
             if (err) {

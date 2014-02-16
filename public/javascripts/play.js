@@ -21,8 +21,9 @@ window.addEventListener("DOMContentLoaded", function () {
         "me.shootDown()",
         "me.shootLeft()",
         "me.shootRight()",
+        "me.stop() -- stop all actions",
         "","*/"].join("\n")
-    )
+    );
 
     window.print = function (message) {
         repl.print(message, "message");

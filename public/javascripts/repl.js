@@ -8,6 +8,7 @@
 		setTimeout: undefined,
 		Function: undefined,
 		document: undefined,
+		window: undefined,
 		_globalStore: {}
 	};
 

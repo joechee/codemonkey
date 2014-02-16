@@ -14,3 +14,10 @@ Instructions to Install
 2. Install node.js (if not already on system)
 3. npm install (to install dependencies)
 4. run with `node app.js` 
+
+Contributors
+------------
+Chun Mun (@chunmun)
+Joe Chee (@joechee)
+Soedarsono (@soedar)
+Yang Shun (@yangshun)

@@ -22,7 +22,7 @@ module.exports = function(gameState, io) {
 
     function broadcastGameState() {
         var state = gameState.serialize();
-        var buffer = new Buffer(state, 'utf-8');
+        var buffer = JSON.stringify(state);
 
         zlib.gzip(buffer, function(err, buffer) {
             if (err) {

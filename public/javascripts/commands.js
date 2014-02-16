@@ -77,5 +77,9 @@
     };
     PlayerCommands.prototype.shoot = makeCmd('playerShoot', -1);
 
+    PlayerCommands.prototype.toString = function () {
+        return "[Object Me]";
+    };
+
     window.PlayerCommands = PlayerCommands;
 })(window);

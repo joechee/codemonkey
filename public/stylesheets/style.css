@@ -34,6 +34,11 @@ h2, p, input {
 	animation-fill-mode: both;
 }
 
+.permanent {
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+
 @-webkit-keyframes swing {
   20% {
     -webkit-transform: rotate(15deg);

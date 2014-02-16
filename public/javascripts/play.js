@@ -142,10 +142,20 @@ window.addEventListener("DOMContentLoaded", function () {
             break;
         case "Object":
         case "Array":
-            repl.print(JSON.stringify(value, 4));
+            try {
+                repl.print(JSON.stringify(value, 4));
+            } catch (e) {
+                if (e instanceof TypeError) {
+                    repl.print(value);                    
+                } else {
+                    throw e;
+                }
+            }
             break;
         default:
             repl.print(value, "error");
         }
     }
+
+    $('.logo-small').addClass('animated swing permanent');
 }, false);

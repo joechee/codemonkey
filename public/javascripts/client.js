@@ -105,7 +105,6 @@ Game.prototype.loadMap = function () {
       this.stage.addChild(tile);
     }
   }
-  console.log(s);
 }
 
 Game.prototype.restart = function () {

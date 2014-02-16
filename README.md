@@ -16,7 +16,7 @@ This hack won the 3rd place at [Facebook Singapore Hackathon](https://www.facebo
 Installation Instructions
 -----------------------
 
-1. Install node.js (if not already on system)
+1. Install [node.js](nodejs.org) (if not already on system)
 2. Install package dependencies
 
         $ npm install
@@ -31,7 +31,7 @@ Installation Instructions
 
 Contributors
 ------------
-Soon Chun Mun ([@chunmun](https://github.com/chunmun))
-Joe Chee ([@joechee](https://github.com/codemonkey))
-Soedarsono ([@soedar](https://github.com/soedar))
-Tay Yang Shun ([@yangshun](https://github.com/yangshun))
+- Soon Chun Mun ([@chunmun](https://github.com/chunmun))
+- Joe Chee ([@joechee](https://github.com/codemonkey))
+- Soedarsono ([@soedar](https://github.com/soedar))
+- Tay Yang Shun ([@yangshun](https://github.com/yangshun))

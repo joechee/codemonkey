@@ -44,9 +44,15 @@
     }
 
     function makeCmd(cmd, direction) {
-        return function() {
-            send(cmd, {playerId: this.player.id, direction: direction})
-        }
+        var fn = function() {
+            send(cmd, {playerId: this.player.id, direction: direction});
+            return this;
+        };
+        fn.toString = function () {
+            return "[Function function]";
+        };
+        return fn;
+
     }
 
 
@@ -60,7 +66,12 @@
     PlayerCommands.prototype.shootDown = makeCmd('playerShoot', DOWN);
     PlayerCommands.prototype.stop = function() {
         emptyQueue();
-    }
+        return this;
+    };
+    PlayerCommands.prototype.stop.toString = function () {
+        return "[Function function]";
+    };
+    PlayerCommands.prototype.shoot = makeCmd('playerShoot', null);
 
     window.PlayerCommands = PlayerCommands;
 })(window);

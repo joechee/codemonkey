@@ -71,10 +71,9 @@ try {
     for (var i in this.players) {
       gameState.players[i] = serialize(this.players[i]);
     }
-
     for (var i in this.projectiles) {
       gameState.projectiles[i] = serialize(this.projectiles[i]);
-    }
+    }  
     return gameState;
   };
 

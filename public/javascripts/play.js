@@ -6,7 +6,29 @@ window.addEventListener("DOMContentLoaded", function () {
         theme: "twilight"
     });
 
-    repl.print("/* Code Monkey v0.1\n\nSupported commands:\n\nme.left()\nme.right()\nme.up()\nme.down()\n\n*/");
+    repl.print([
+        "/*",
+        "",
+        "Code Monkey v0.1",
+        "",
+        "Supported commands:",
+        "",
+        "me.left()",
+        "me.right()",
+        "me.up()",
+        "me.down()",
+        "me.shoot()",
+        "me.shootUp()",
+        "me.shootDown()",
+        "me.shootLeft()",
+        "me.shootRight()",
+        "me.stop() -- stop all actions",
+        "",
+        "You can chain commands, i.e.:",
+        "",
+        "me.up().shootLeft()",
+        "","*/"].join("\n")
+    );
 
     window.print = function (message) {
         repl.print(message, "message");

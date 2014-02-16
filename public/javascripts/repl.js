@@ -40,7 +40,9 @@
 					variableCode = "";
 				}
 
-				
+				// function within the with statement is
+				// to counter side-effects from
+				// function hoisting
 				var safeCode = "with(data){(function (){" + code + ";" + variableCode + "})()};";
 				var windowClone = {};
 

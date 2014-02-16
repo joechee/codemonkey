@@ -9,6 +9,9 @@ block content
                 input(type="text", class="name", name="name")
                 input(type="submit", style="display:none")
 
-        script 
-            $(function() { $('.logo').addClass('animated swing');})
+        script.
+            $(function() { 
+                $('.logo').addClass('animated swing');
+                $('.name').focus();
+            });
 

@@ -231,8 +231,8 @@ try {
   };
 
   Player.prototype.takeDamage = function () {
-    /*
     this.HP--;
+    /*
     if (this.HP <= 0 && runner === "server") {
       setTimeout(function () {
         self.triggerRevive();

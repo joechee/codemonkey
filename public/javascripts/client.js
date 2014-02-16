@@ -26,13 +26,14 @@ var Client = function () {
 };
 
 GameConfig = {
-  tileSize: 25,
-  padding: 1,
+  tileSize: 35,
+  padding: 0,
   playerSize: 18,
   chaseZoom: 1.0,
   doChaseCam: false,
-  rows: 23,
-  cols: 29
+  rows: 17,
+  cols: 21,
+  banana: new createjs.Bitmap('/images/banana.png')
 };
 
 var xyToPix = function(pt) {
@@ -78,18 +79,33 @@ var Game = function (stage) {
 }
 
 Game.prototype.loadMap = function () {
+  var tileImages = ['/images/tiles-1.png', '/images/tiles-2.png', '/images/tiles-3.png'];
+
+  var s = "044444144444404044441424444444144440424444402041141442044444444444444444444444422444042444414440244440444010444401424444114044442441444444444444244442444244424240444424444444402444444444024442441144440244444044244444444424442444444044441440441424400444444144441444144214440442444444424404404444144444440442444424144104444044144444422114442444002421244440444";
+
   for (var i=0;i<this.rows;i++) {
     for (var j=0;j<this.cols;j++) {
-      var tile = new createjs.Shape();
-      tile.graphics.beginFill("rgba(164, 123, 0, 0.8)").drawRect(0, 0, GameConfig.tileSize, GameConfig.tileSize);
-      //var computedAlpha = Math.abs(i-this.rows)/this.rows;
-      //tile.alpha = computedAlpha;
+      //var isImage = Math.random() < 0.25;
+      var choice = parseInt(s.charAt(i*this.cols + j));
+      if (choice < 4) {
+        var tile = new createjs.Bitmap(tileImages[choice]);
+        //var computedAlpha = Math.abs(i-this.rows)/this.rows;
+        //tile.alpha = computedAlpha;
+        tile.scaleX = GameConfig.tileSize / 160;
+        tile.scaleY = GameConfig.tileSize / 160;
+
+      } else {
+        var tile = new createjs.Shape();
+        tile.graphics.beginFill("rgba(131, 203, 65, 0.8)").drawRect(0, 0, GameConfig.tileSize, GameConfig.tileSize);
+      }
+
       var pt = xyToPix({x:j,y:i});
       tile.x = pt.x;
       tile.y = pt.y;
       this.stage.addChild(tile);
     }
   }
+  console.log(s);
 }
 
 Game.prototype.restart = function () {
@@ -338,7 +354,7 @@ var Projectile = function(data) {
 
   // Easeljs stuff
   // this.view = new createjs.Shape();
-  this.view = new createjs.Bitmap('/images/banana.png');
+  this.view = GameConfig.banana.clone();
   var scaleX = GameConfig.tileSize / 300;
   var scaleY = GameConfig.tileSize / 218;
 

@@ -126,4 +126,6 @@ window.addEventListener("DOMContentLoaded", function () {
             repl.print(value, "error");
         }
     }
+
+    $('.logo-small').addClass('animated swing permanent');
 }, false);

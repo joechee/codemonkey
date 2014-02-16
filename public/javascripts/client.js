@@ -138,7 +138,7 @@ Game.prototype.handleTick = function(ticker_data) {
     }
 
     this.timePassed += timestep;
-    if (this.timePassed >= this.roundTime) { this.end(); }
+    //if (this.timePassed >= this.roundTime) { this.end(); }
   }
 
   if (this.state == "END") {

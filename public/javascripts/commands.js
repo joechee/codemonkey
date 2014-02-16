@@ -13,13 +13,17 @@
     var queue = [];
     var queueEmpty = true;
     function send(key, command) {
-        command.key = key;
-        queue.push(command);
-        if (queueEmpty) {
-            processQueue();
-            queueEmpty = false;
+        // Only enqueue up to 50 commands, 
+        // drop the packets
+        if (queue.length < 50) {
+            command.key = key;
+            queue.push(command);
+            if (queueEmpty) {
+                processQueue();
+                queueEmpty = false;
+            }
         }
-    }
+    }   
 
     function processQueue() {
         if (queue.length == 0) {
@@ -44,9 +48,15 @@
     }
 
     function makeCmd(cmd, direction) {
-        return function() {
-            send(cmd, {playerId: this.player.id, direction: direction})
-        }
+        var fn = function() {
+            send(cmd, {playerId: this.player.id, direction: direction});
+            return this;
+        };
+        fn.toString = function () {
+            return "[Function function]";
+        };
+        return fn;
+
     }
 
 
@@ -60,7 +70,16 @@
     PlayerCommands.prototype.shootDown = makeCmd('playerShoot', DOWN);
     PlayerCommands.prototype.stop = function() {
         emptyQueue();
-    }
+        return this;
+    };
+    PlayerCommands.prototype.stop.toString = function () {
+        return "[Function function]";
+    };
+    PlayerCommands.prototype.shoot = makeCmd('playerShoot', null);
+
+    PlayerCommands.prototype.toString = function () {
+        return "[Object Me]";
+    };
 
     window.PlayerCommands = PlayerCommands;
 })(window);

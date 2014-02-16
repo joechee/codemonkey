@@ -9,7 +9,7 @@ try {
 }
 (function (window) {
   
-  var MAP_SIZE = [29, 23];
+  var MAP_SIZE = [21, 17];
   
   var UP = 0;
   var RIGHT = 1;
@@ -71,10 +71,9 @@ try {
     for (var i in this.players) {
       gameState.players[i] = serialize(this.players[i]);
     }
-
     for (var i in this.projectiles) {
       gameState.projectiles[i] = serialize(this.projectiles[i]);
-    }
+    }  
     return gameState;
   };
 

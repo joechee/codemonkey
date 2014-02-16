@@ -6,7 +6,29 @@ window.addEventListener("DOMContentLoaded", function () {
         theme: "twilight"
     });
 
-    repl.print("/* Code Monkey v0.1\n\nSupported commands:\n\nme.left()\nme.right()\nme.up()\nme.down()\n\n*/");
+    repl.print([
+        "/*",
+        "",
+        "Code Monkey v0.1",
+        "",
+        "Supported commands:",
+        "",
+        "me.left()",
+        "me.right()",
+        "me.up()",
+        "me.down()",
+        "me.shoot()",
+        "me.shootUp()",
+        "me.shootDown()",
+        "me.shootLeft()",
+        "me.shootRight()",
+        "me.stop() -- stop all actions",
+        "",
+        "You can chain commands, i.e.:",
+        "",
+        "me.up().shootLeft()",
+        "","*/"].join("\n")
+    );
 
     window.print = function (message) {
         repl.print(message, "message");
@@ -120,7 +142,15 @@ window.addEventListener("DOMContentLoaded", function () {
             break;
         case "Object":
         case "Array":
-            repl.print(JSON.stringify(value, 4));
+            try {
+                repl.print(JSON.stringify(value, 4));
+            } catch (e) {
+                if (e instanceof TypeError) {
+                    repl.print(value);                    
+                } else {
+                    throw e;
+                }
+            }
             break;
         default:
             repl.print(value, "error");

@@ -21,9 +21,28 @@ module.exports = function(gameState, io) {
         return true;
     }
 
-    function broadcastGameState() {
+/*
+    var throttle = new Date();
+
+    function broadcastGameState(force) {
+        if (new Date() - throttle > 33.3 || force) { // Essentially to create at least 30 fps
+            io.sockets.emit('gameState', gameState.serialize());
+            throttle = new Date();
+        } else {
+            return;
+        }
+*/
+    var throttle = new Date();
+
+    function broadcastGameState(force) {
         var state = gameState.serialize();
         var buffer = JSON.stringify(state);
+
+        if (new Date() - throttle > 33.3 || force) {// Essentially to create at least 30 fps
+            throttle = new Date();
+        } else {
+            return;
+        }
 
         zlib.gzip(buffer, function(err, buffer) {
             if (err) {
@@ -39,7 +58,7 @@ module.exports = function(gameState, io) {
         socket.on('registerPlayer', function(data) {
             socket.player.name = data.name;
             socket.emit('gameReady', socket.player.serialize());
-            broadcastGameState();
+            broadcastGameState(true);
         });
 
         socket.on('playerMove', function(data) {
@@ -55,6 +74,10 @@ module.exports = function(gameState, io) {
         socket.on('playerShoot', function(data) {
             if (!floodCheck(socket)) { return; }
             if (socket.player.id == data.playerId) {
+                if (!data.direction) {
+                    var player = gameState.players[data.playerId];
+                    data.direction = player.direction;
+                }
                 var projectile = gameState.players[data.playerId].shoot(data.direction);
                 if (Object.keys(gameState.projectiles).length == 1) {
                     gameState.updateProjectiles(broadcastGameState);

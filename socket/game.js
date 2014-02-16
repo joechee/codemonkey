@@ -74,6 +74,10 @@ module.exports = function(gameState, io) {
         socket.on('playerShoot', function(data) {
             if (!floodCheck(socket)) { return; }
             if (socket.player.id == data.playerId) {
+                if (!data.direction) {
+                    var player = gameState.players[data.playerId];
+                    data.direction = player.direction;
+                }
                 var projectile = gameState.players[data.playerId].shoot(data.direction);
                 if (Object.keys(gameState.projectiles).length == 1) {
                     gameState.updateProjectiles(broadcastGameState);

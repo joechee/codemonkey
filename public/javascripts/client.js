@@ -105,7 +105,6 @@ Game.prototype.loadMap = function () {
       this.stage.addChild(tile);
     }
   }
-  console.log(s);
 }
 
 Game.prototype.restart = function () {
@@ -138,7 +137,7 @@ Game.prototype.handleTick = function(ticker_data) {
     }
 
     this.timePassed += timestep;
-    if (this.timePassed >= this.roundTime) { this.end(); }
+    //if (this.timePassed >= this.roundTime) { this.end(); }
   }
 
   if (this.state == "END") {

@@ -159,9 +159,9 @@ try {
   Player.prototype.move = function(direction) {
     if (this.gameState === undefined) {
       throw new Error("Game State not defined!");
-    } else if (this.HP <= 0) {
+    } /*else if (this.HP <= 0) {
       return; // player is dead
-    }
+    }*/
 
     if (direction < 0 || direction > 3) {
       throw new Error("Invalid direction");
@@ -174,9 +174,9 @@ try {
   Player.prototype.moveTo = function (x, y) {
     if (this.gameState === undefined) {
       throw new Error("Game State not defined!");
-    } else if (this.HP <= 0) {
+    } /*else if (this.HP <= 0) {
       return; // player is dead
-    }
+    }*/
 
     if (this.checkCollision(x, y)) {
       return false;
@@ -218,9 +218,9 @@ try {
 
 
   Player.prototype.shoot = function (direction) {
-    if (this.HP <= 0) {
+    /*if (this.HP <= 0) {
       return; // player is dead
-    }
+    }*/
     var projectile = new Projectile(this.gameState,
                                     this.x,
                                     this.y,
@@ -230,12 +230,14 @@ try {
   };
 
   Player.prototype.takeDamage = function () {
+    /*
     this.HP--;
     if (this.HP <= 0 && runner === "server") {
       setTimeout(function () {
         self.triggerRevive();
       }, 1000);
     }
+    */
   };
 
   Player.prototype.triggerRevive = function () {
@@ -268,7 +270,7 @@ try {
     if (playerCollision) {
       this.gameState.deregisterProjectile(this);
       if (playerCollision !== "wall") {
-        playerCollision.HP--;
+        playerCollision.takeDamage();
       }
       return;
     }

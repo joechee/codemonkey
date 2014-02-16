@@ -105,7 +105,6 @@ Game.prototype.loadMap = function () {
       this.stage.addChild(tile);
     }
   }
-  console.log(s);
 }
 
 Game.prototype.restart = function () {
@@ -138,7 +137,7 @@ Game.prototype.handleTick = function(ticker_data) {
     }
 
     this.timePassed += timestep;
-    if (this.timePassed >= this.roundTime) { this.end(); }
+    //if (this.timePassed >= this.roundTime) { this.end(); }
   }
 
   if (this.state == "END") {
@@ -186,22 +185,7 @@ Game.prototype.updateWorld = function () {
       if (this.players[id].HP > this.gameState.players[id].HP) {
         this.players[id].animateHit(this.stage);
       }
-      var lastRotation = this.players[id].view.rotation;
-      if (this.gameState.players[id].x < this.players[id].x) {
-        // Move left
-        this.updatePlayer(this.gameState.players[id], -90);
-      } else if (this.gameState.players[id].x > this.players[id].x) {
-        // Move right
-        this.updatePlayer(this.gameState.players[id], 90);
-      } else if (this.gameState.players[id].y > this.players[id].y) {
-        // Move down
-        this.updatePlayer(this.gameState.players[id], 180);
-      } else if (this.gameState.players[id].y < this.players[id].y) {
-        // Move Up
-        this.updatePlayer(this.gameState.players[id], 0);
-      } else {
-        this.updatePlayer(this.gameState.players[id], lastRotation);
-      }
+      this.updatePlayer(this.gameState.players[id], this.gameState.players[id].direction * (-90));
     }
   }
   for (var id in this.players) {
@@ -325,13 +309,13 @@ Player.prototype.animateHit = function (stage) {
 
   for (var i=0; i<20; i++) {
     var splat = new createjs.Shape();
-    var splatSize = GameConfig.playerSize * 0.5 * Math.random();
+    var splatSize = GameConfig.playerSize * Math.random();
     //splat.graphics.beginFill("#ff0000").drawRect(0, 0, splatSize, splatSize);
-    splat.graphics.beginFill("#ff0000").drawCircle(0,0,splatSize);
+    splat.graphics.beginFill("#cccccc").drawCircle(0,0,splatSize);
     splat.x = x;
     splat.y = y;
-    var offsetX = 30 * (Math.random() * 2.0 - 1);
-    var offsetY = 30 * (Math.random() * 2.0 - 1);
+    var offsetX = 35 * (Math.random() * 2.0 - 1);
+    var offsetY = 35 * (Math.random() * 2.0 - 1);
 
     createjs.Tween.get(splat).to({x:x+offsetX, y:y+offsetY, alpha:0}, 500);
     stage.addChild(splat);

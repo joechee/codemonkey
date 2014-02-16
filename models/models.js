@@ -12,15 +12,15 @@ try {
   var MAP_SIZE = [21, 17];
   
   var UP = 0;
-  var RIGHT = 1;
-  var LEFT = 2;
-  var DOWN = 3;
+  var LEFT = 1;
+  var DOWN = 2;
+  var RIGHT = 3;
 
   var directions = [
     [0, -1],
-    [1, 0],
     [-1, 0],
-    [0, 1]
+    [0, 1],
+    [1, 0]
   ];
 
   // Serialize directions so that indexOf can be used
@@ -159,9 +159,9 @@ try {
   Player.prototype.move = function(direction) {
     if (this.gameState === undefined) {
       throw new Error("Game State not defined!");
-    } else if (this.HP <= 0) {
+    } /*else if (this.HP <= 0) {
       return; // player is dead
-    }
+    }*/
 
     if (direction < 0 || direction > 3) {
       throw new Error("Invalid direction");
@@ -174,9 +174,9 @@ try {
   Player.prototype.moveTo = function (x, y) {
     if (this.gameState === undefined) {
       throw new Error("Game State not defined!");
-    } else if (this.HP <= 0) {
+    } /*else if (this.HP <= 0) {
       return; // player is dead
-    }
+    }*/
 
     if (this.checkCollision(x, y)) {
       return false;
@@ -218,9 +218,10 @@ try {
 
 
   Player.prototype.shoot = function (direction) {
-    if (this.HP <= 0) {
+    /*if (this.HP <= 0) {
       return; // player is dead
-    }
+    }*/
+    this.direction = direction;
     var projectile = new Projectile(this.gameState,
                                     this.x,
                                     this.y,
@@ -231,11 +232,13 @@ try {
 
   Player.prototype.takeDamage = function () {
     this.HP--;
+    /*
     if (this.HP <= 0 && runner === "server") {
       setTimeout(function () {
         self.triggerRevive();
       }, 1000);
     }
+    */
   };
 
   Player.prototype.triggerRevive = function () {
@@ -268,7 +271,7 @@ try {
     if (playerCollision) {
       this.gameState.deregisterProjectile(this);
       if (playerCollision !== "wall") {
-        playerCollision.HP--;
+        playerCollision.takeDamage();
       }
       return;
     }

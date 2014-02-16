@@ -1,13 +1,14 @@
 (function(window) {
     var UP = 0;
-    var RIGHT = 1;
-    var LEFT = 2;
-    var DOWN = 3;
-    var DIRECTIONS = [
-    [0,-1],
-    [1,0],
-    [-1,0],
-    [0,1]
+    var LEFT = 1;
+    var DOWN = 2;
+    var RIGHT = 3;
+
+    var directions = [
+        [0, -1],
+        [-1, 0],
+        [0, 1],
+        [1, 0]
     ];
 
     var queue = [];
@@ -59,7 +60,6 @@
 
     }
 
-
     PlayerCommands.prototype.left = makeCmd('playerMove', LEFT);
     PlayerCommands.prototype.right = makeCmd('playerMove', RIGHT);
     PlayerCommands.prototype.up = makeCmd('playerMove', UP);
@@ -75,11 +75,24 @@
     PlayerCommands.prototype.stop.toString = function () {
         return "[Function function]";
     };
-    PlayerCommands.prototype.shoot = makeCmd('playerShoot', null);
+    PlayerCommands.prototype.shoot = makeCmd('playerShoot', -1);
 
     PlayerCommands.prototype.toString = function () {
         return "[Object Me]";
     };
+
+    PlayerCommands.prototype.l = PlayerCommands.prototype.left;
+    PlayerCommands.prototype.r = PlayerCommands.prototype.right;
+    PlayerCommands.prototype.u = PlayerCommands.prototype.up;
+    PlayerCommands.prototype.d = PlayerCommands.prototype.down;
+    PlayerCommands.prototype.s = PlayerCommands.prototype.shoot;
+    PlayerCommands.prototype.su = PlayerCommands.prototype.shootUp;
+    PlayerCommands.prototype.sd = PlayerCommands.prototype.shootDown;
+    PlayerCommands.prototype.sl = PlayerCommands.prototype.shootLeft;
+    PlayerCommands.prototype.sr = PlayerCommands.prototype.shootRight;
+    PlayerCommands.prototype.st = PlayerCommands.prototype.stop;
+
+
 
     window.PlayerCommands = PlayerCommands;
 })(window);

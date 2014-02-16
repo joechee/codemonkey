@@ -60,7 +60,6 @@
 
     }
 
-
     PlayerCommands.prototype.left = makeCmd('playerMove', LEFT);
     PlayerCommands.prototype.right = makeCmd('playerMove', RIGHT);
     PlayerCommands.prototype.up = makeCmd('playerMove', UP);
@@ -81,6 +80,19 @@
     PlayerCommands.prototype.toString = function () {
         return "[Object Me]";
     };
+
+    PlayerCommands.prototype.l = PlayerCommands.prototype.left;
+    PlayerCommands.prototype.r = PlayerCommands.prototype.right;
+    PlayerCommands.prototype.u = PlayerCommands.prototype.up;
+    PlayerCommands.prototype.d = PlayerCommands.prototype.down;
+    PlayerCommands.prototype.s = PlayerCommands.prototype.shoot;
+    PlayerCommands.prototype.su = PlayerCommands.prototype.shootUp;
+    PlayerCommands.prototype.sd = PlayerCommands.prototype.shootDown;
+    PlayerCommands.prototype.sl = PlayerCommands.prototype.shootLeft;
+    PlayerCommands.prototype.sr = PlayerCommands.prototype.shootRight;
+    PlayerCommands.prototype.st = PlayerCommands.prototype.stop;
+
+
 
     window.PlayerCommands = PlayerCommands;
 })(window);

@@ -309,13 +309,13 @@ Player.prototype.animateHit = function (stage) {
 
   for (var i=0; i<20; i++) {
     var splat = new createjs.Shape();
-    var splatSize = GameConfig.playerSize * 0.5 * Math.random();
+    var splatSize = GameConfig.playerSize * Math.random();
     //splat.graphics.beginFill("#ff0000").drawRect(0, 0, splatSize, splatSize);
     splat.graphics.beginFill("#cccccc").drawCircle(0,0,splatSize);
     splat.x = x;
     splat.y = y;
-    var offsetX = 30 * (Math.random() * 2.0 - 1);
-    var offsetY = 30 * (Math.random() * 2.0 - 1);
+    var offsetX = 35 * (Math.random() * 2.0 - 1);
+    var offsetY = 35 * (Math.random() * 2.0 - 1);
 
     createjs.Tween.get(splat).to({x:x+offsetX, y:y+offsetY, alpha:0}, 500);
     stage.addChild(splat);

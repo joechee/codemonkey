@@ -13,13 +13,17 @@
     var queue = [];
     var queueEmpty = true;
     function send(key, command) {
-        command.key = key;
-        queue.push(command);
-        if (queueEmpty) {
-            processQueue();
-            queueEmpty = false;
+        // Only enqueue up to 50 commands, 
+        // drop the packets
+        if (queue.length < 50) {
+            command.key = key;
+            queue.push(command);
+            if (queueEmpty) {
+                processQueue();
+                queueEmpty = false;
+            }
         }
-    }
+    }   
 
     function processQueue() {
         if (queue.length == 0) {

@@ -75,7 +75,7 @@
     PlayerCommands.prototype.stop.toString = function () {
         return "[Function function]";
     };
-    PlayerCommands.prototype.shoot = makeCmd('playerShoot', null);
+    PlayerCommands.prototype.shoot = makeCmd('playerShoot', -1);
 
     window.PlayerCommands = PlayerCommands;
 })(window);

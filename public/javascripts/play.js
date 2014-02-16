@@ -17,11 +17,16 @@ window.addEventListener("DOMContentLoaded", function () {
         "me.right()",
         "me.up()",
         "me.down()",
+        "me.shoot()",
         "me.shootUp()",
         "me.shootDown()",
         "me.shootLeft()",
         "me.shootRight()",
         "me.stop() -- stop all actions",
+        "",
+        "You can chain commands, i.e.:",
+        "",
+        "me.up().shootLeft()",
         "","*/"].join("\n")
     );
 

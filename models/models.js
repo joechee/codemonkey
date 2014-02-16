@@ -12,15 +12,15 @@ try {
   var MAP_SIZE = [21, 17];
   
   var UP = 0;
-  var RIGHT = 1;
-  var LEFT = 2;
-  var DOWN = 3;
+  var LEFT = 1;
+  var DOWN = 2;
+  var RIGHT = 3;
 
   var directions = [
     [0, -1],
-    [1, 0],
     [-1, 0],
-    [0, 1]
+    [0, 1],
+    [1, 0]
   ];
 
   // Serialize directions so that indexOf can be used
@@ -221,6 +221,7 @@ try {
     /*if (this.HP <= 0) {
       return; // player is dead
     }*/
+    this.direction = direction;
     var projectile = new Projectile(this.gameState,
                                     this.x,
                                     this.y,

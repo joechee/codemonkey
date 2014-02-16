@@ -1,13 +1,14 @@
 (function(window) {
     var UP = 0;
-    var RIGHT = 1;
-    var LEFT = 2;
-    var DOWN = 3;
-    var DIRECTIONS = [
-    [0,-1],
-    [1,0],
-    [-1,0],
-    [0,1]
+    var LEFT = 1;
+    var DOWN = 2;
+    var RIGHT = 3;
+
+    var directions = [
+        [0, -1],
+        [-1, 0],
+        [0, 1],
+        [1, 0]
     ];
 
     var queue = [];

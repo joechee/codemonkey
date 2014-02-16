@@ -44,9 +44,14 @@
     }
 
     function makeCmd(cmd, direction) {
-        return function() {
+        var fn = function() {
             send(cmd, {playerId: this.player.id, direction: direction})
-        }
+        };
+        fn.toString = function () {
+            return "[Function function]";
+        };
+        return fn;
+
     }
 
 

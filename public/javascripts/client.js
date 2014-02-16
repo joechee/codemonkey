@@ -64,6 +64,7 @@ var Game = function (stage) {
 
   var that = this;
   socket.on('gameState', function(data) {
+    data = JSON.parse(JXG.decompress(data));
     that.gameState.unserialize(data);
   });
 

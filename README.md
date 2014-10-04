@@ -32,6 +32,6 @@ Installation Instructions
 Contributors
 ------------
 - Soon Chun Mun ([@chunmun](https://github.com/chunmun))
-- Joe Chee ([@joechee](https://github.com/codemonkey))
+- Joe Chee ([@joechee](https://github.com/joechee))
 - Soedarsono ([@soedar](https://github.com/soedar))
 - Tay Yang Shun ([@yangshun](https://github.com/yangshun))
